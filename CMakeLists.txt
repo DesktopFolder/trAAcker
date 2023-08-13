@@ -18,10 +18,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(FetchContent)
 
-FetchContent_Declare(RmlUi
-    GIT_REPOSITORY https://github.com/hobyst/RmlUi
-    GIT_TAG 104fdb35d3ea6320733bde72b38b1c4365ec49a5)
-FetchContent_MakeAvailable(RmlUi)
+#FetchContent_Declare(RmlUi
+#    GIT_REPOSITORY https://github.com/hobyst/RmlUi
+#    GIT_TAG 104fdb35d3ea6320733bde72b38b1c4365ec49a5)
+#FetchContent_MakeAvailable(RmlUi)
 
 FetchContent_Declare(
     fmt
@@ -34,9 +34,13 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
+FetchContent_Declare(json
+    URL https://github.com/nlohmann/json/releases/download/v3.11.2/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
 add_executable(
     AAToolCPP
-    src/WindowManager.cpp
+    src/WindowManager.cpp src/WindowManager.hpp
     main.cpp)
 
 if(${SANITIZE} STREQUAL "address")
@@ -46,11 +50,12 @@ if(${SANITIZE} STREQUAL "address")
 endif()
 
 # target_include_directories(AAToolCPP PRIVATE "src/")
-target_link_libraries(AAToolCPP PRIVATE
-    # RmlUi::RmlUi
-    )
+#target_link_libraries(AAToolCPP PRIVATE
+#    # RmlUi::RmlUi
+#    )
 
 target_link_libraries(AAToolCPP PUBLIC sfml-graphics sfml-window sfml-system)
 target_link_libraries(AAToolCPP PRIVATE fmt::fmt)
+target_link_libraries(AAToolCPP PRIVATE nlohmann_json::nlohmann_json)
 
 file(COPY ${PROJECT_BINARY_DIR}/compile_commands.json DESTINATION ${PROJECT_SOURCE_DIR})
