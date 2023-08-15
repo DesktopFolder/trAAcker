@@ -54,6 +54,13 @@ endif()
 #    # RmlUi::RmlUi
 #    )
 
+if(APPLE)
+    # Required for dmon
+    target_link_libraries(AAToolCPP PRIVATE
+        "-framework CoreFoundation"
+        "-framework CoreServices"
+    )
+endif()
 target_link_libraries(AAToolCPP PUBLIC sfml-graphics sfml-window sfml-system)
 target_link_libraries(AAToolCPP PRIVATE fmt::fmt)
 target_link_libraries(AAToolCPP PRIVATE nlohmann_json::nlohmann_json)
