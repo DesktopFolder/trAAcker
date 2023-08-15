@@ -40,7 +40,9 @@ FetchContent_MakeAvailable(json)
 
 add_executable(
     AAToolCPP
+    src/Overlay.cpp src/Overlay.hpp
     src/WindowManager.cpp src/WindowManager.hpp
+    src/ResourceManager.cpp src/ResourceManager.hpp
     main.cpp)
 
 if(${SANITIZE} STREQUAL "address")

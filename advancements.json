@@ -1,0 +1,1049 @@
+[
+  {
+    "@name": "Adventure",
+    "advancement": [
+      {
+        "@id": "minecraft:adventure/root",
+        "@name": "Adventure",
+        "@icon": "adventure"
+      },
+      {
+        "@id": "minecraft:adventure/kill_a_mob",
+        "@name": "Monster Hunter",
+        "@short_name": "Hunter"
+      },
+      {
+        "@id": "minecraft:adventure/ol_betsy",
+        "@name": "Ol' Betsy"
+      },
+      {
+        "@id": "minecraft:adventure/whos_the_pillager_now",
+        "@name": "Who's the Pillager Now?",
+        "@short_name": "The Pillager",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/sleep_in_bed",
+        "@name": "Sweet Dreams",
+        "@short_name": "Dreams"
+      },
+      {
+        "@id": "minecraft:adventure/trade",
+        "@name": "What a Deal!",
+        "@short_name": "What a Deal"
+      },
+      {
+        "@id": "minecraft:adventure/two_birds_one_arrow",
+        "@name": "Two Birds, One Arrow",
+        "@short_name": "Two Birds",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/arbalistic",
+        "@name": "Arbalistic",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/honey_block_slide",
+        "@name": "Sticky Situation",
+        "@short_name": "Sticky",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/bullseye",
+        "@name": "Bullseye",
+        "@type": "challenge"
+      },
+      {
+        "@id": "minecraft:adventure/shoot_arrow",
+        "@name": "Take Aim"
+      },
+      {
+        "@id": "minecraft:adventure/sniper_duel",
+        "@name": "Sniper Duel",
+        "@type": "challenge"
+      },
+      {
+        "@id": "minecraft:adventure/voluntary_exile",
+        "@name": "Voluntary Exile",
+        "@short_name": "Exile",
+        "@icon": "pillager_banner",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/hero_of_the_village",
+        "@name": "Hero of the Village",
+        "@short_name": "Hero OTV",
+        "@icon": "pillager_banner",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/throw_trident",
+        "@name": "A Throwaway Joke",
+        "@short_name": "ATJ",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/very_very_frightening",
+        "@name": "Very Very Frightening",
+        "@short_name": "VVF",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/summon_iron_golem",
+        "@name": "Hired Help",
+        "@type": "goal",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/totem_of_undying",
+        "@name": "Postmortal",
+        "@type": "goal",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:adventure/adventuring_time",
+        "@name": "Adventuring Time",
+        "@short_name": "Adventuring",
+        "@type": "challenge",
+        "@half": "false",
+        "criteria": {
+          "@goal": "Biomes Visited",
+          "criterion": [
+            {
+              "@id": "minecraft:plains"
+            },
+            {
+              "@id": "minecraft:forest"
+            },
+            {
+              "@id": "minecraft:wooded_hills",
+              "@short_name": "Wooded Hills"
+            },
+            {
+              "@id": "minecraft:birch_forest"
+            },
+            {
+              "@id": "minecraft:birch_forest_hills",
+              "@name": "Birch Hills"
+            },
+            {
+              "@id": "minecraft:dark_forest"
+            },
+            {
+              "@id": "minecraft:swamp"
+            },
+            {
+              "@id": "minecraft:taiga"
+            },
+            {
+              "@id": "minecraft:taiga_hills"
+            },
+            {
+              "@id": "minecraft:giant_tree_taiga",
+              "@name": "Mega Taiga"
+            },
+            {
+              "@id": "minecraft:giant_tree_taiga_hills",
+              "@name": "Mega Taiga Hill",
+              "@short_name": "Mega Taiga H"
+            },
+            {
+              "@id": "minecraft:snowy_taiga",
+              "@name": "Snowy Taiga",
+              "@short_name": "Snow Taiga"
+            },
+            {
+              "@id": "minecraft:snowy_taiga_hills",
+              "@name": "Snowy Taiga Hill",
+              "@short_name": "Snow Taiga H"
+            },
+            {
+              "@id": "minecraft:snowy_tundra",
+              "@name": "Snowy Tundra",
+              "@short_name": "Snow Tundra"
+            },
+            {
+              "@id": "minecraft:snowy_mountains",
+              "@name": "Snowy Mountain",
+              "@short_name": "Snow Mtn"
+            },
+            {
+              "@id": "minecraft:snowy_beach",
+              "@name": "Snowy Beach",
+              "@short_name": "Snow Beach"
+            },
+            {
+              "@id": "minecraft:frozen_river",
+              "@short_name": "F River"
+            },
+            {
+              "@id": "minecraft:river"
+            },
+            {
+              "@id": "minecraft:desert"
+            },
+            {
+              "@id": "minecraft:desert_hills"
+            },
+            {
+              "@id": "minecraft:savanna"
+            },
+            {
+              "@id": "minecraft:savanna_plateau",
+              "@name": "Savanna Plat"
+            },
+            {
+              "@id": "minecraft:jungle"
+            },
+            {
+              "@id": "minecraft:jungle_edge"
+            },
+            {
+              "@id": "minecraft:jungle_hills"
+            },
+            {
+              "@id": "minecraft:bamboo_jungle",
+              "@short_name": "Bamboo"
+            },
+            {
+              "@id": "minecraft:bamboo_jungle_hills",
+              "@name": "Bamboo Hills"
+            },
+            {
+              "@id": "minecraft:stone_shore",
+              "@short_name": "Stn Shore"
+            },
+            {
+              "@id": "minecraft:mountains"
+            },
+            {
+              "@id": "minecraft:wooded_mountains",
+              "@name": "Wooded Mtn"
+            },
+            {
+              "@id": "minecraft:badlands"
+            },
+            {
+              "@id": "minecraft:badlands_plateau",
+              "@name": "Badlands Plateau",
+              "@short_name": "Bad Plat"
+            },
+            {
+              "@id": "minecraft:wooded_badlands_plateau",
+              "@name": "Wooded Plateau",
+              "@short_name": "Wood Plat"
+            },
+            {
+              "@id": "minecraft:mushroom_fields",
+              "@short_name": "Mushroom"
+            },
+            {
+              "@id": "minecraft:mushroom_field_shore",
+              "@name": "Mushroom Shore",
+              "@short_name": "MushShore"
+            },
+            {
+              "@id": "minecraft:beach"
+            },
+            {
+              "@id": "minecraft:warm_ocean",
+              "@short_name": "Warm"
+            },
+            {
+              "@id": "minecraft:lukewarm_ocean",
+              "@short_name": "Lukewarm"
+            },
+            {
+              "@id": "minecraft:deep_lukewarm_ocean",
+              "@name": "Deep Lukewarm",
+              "@short_name": "Deep LW"
+            },
+            {
+              "@id": "minecraft:cold_ocean",
+              "@short_name": "Cold"
+            },
+            {
+              "@id": "minecraft:deep_cold_ocean",
+              "@short_name": "Deep C"
+            },
+            {
+              "@id": "minecraft:deep_frozen_ocean",
+              "@name": "Deep Frozen",
+              "@short_name": "DF"
+            }
+          ]
+        }
+      },
+      {
+        "@id": "minecraft:adventure/kill_all_mobs",
+        "@name": "Monsters Hunted",
+        "@short_name": "Monsters",
+        "@type": "challenge",
+        "@half": "false",
+        "criteria": {
+          "@goal": "Monsters Killed",
+          "criterion": [
+            {
+              "@id": "minecraft:creeper"
+            },
+            {
+              "@id": "minecraft:zombie"
+            },
+            {
+              "@id": "minecraft:skeleton"
+            },
+            {
+              "@id": "minecraft:husk"
+            },
+            {
+              "@id": "minecraft:drowned"
+            },
+            {
+              "@id": "minecraft:stray"
+            },
+            {
+              "@id": "minecraft:spider"
+            },
+            {
+              "@id": "minecraft:cave_spider"
+            },
+            {
+              "@id": "minecraft:enderman"
+            },
+            {
+              "@id": "minecraft:slime"
+            },
+            {
+              "@id": "minecraft:magma_cube"
+            },
+            {
+              "@id": "minecraft:ghast"
+            },
+            {
+              "@id": "minecraft:blaze"
+            },
+            {
+              "@id": "minecraft:wither_skeleton",
+              "@name": "Wither Skeleton",
+              "@short_name": "W Skeleton"
+            },
+            {
+              "@id": "minecraft:piglin"
+            },
+            {
+              "@id": "minecraft:zombified_piglin",
+              "@name": "Zombie Piglin"
+            },
+            {
+              "@id": "minecraft:hoglin"
+            },
+            {
+              "@id": "minecraft:zoglin"
+            },
+            {
+              "@id": "minecraft:silverfish"
+            },
+            {
+              "@id": "minecraft:ender_dragon"
+            },
+            {
+              "@id": "minecraft:endermite"
+            },
+            {
+              "@id": "minecraft:shulker"
+            },
+            {
+              "@id": "minecraft:wither"
+            },
+            {
+              "@id": "minecraft:phantom"
+            },
+            {
+              "@id": "minecraft:guardian"
+            },
+            {
+              "@id": "minecraft:elder_guardian"
+            },
+            {
+              "@id": "minecraft:zombie_villager",
+              "@short_name": "Z-Villager"
+            },
+            {
+              "@id": "minecraft:witch"
+            },
+            {
+              "@id": "minecraft:pillager"
+            },
+            {
+              "@id": "minecraft:vindicator"
+            },
+            {
+              "@id": "minecraft:evoker"
+            },
+            {
+              "@id": "minecraft:vex"
+            },
+            {
+              "@id": "minecraft:ravager"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "@name": "End",
+    "advancement": [
+      {
+        "@id": "minecraft:end/root",
+        "@name": "The End",
+        "@icon": "end",
+        "@hidden": "true"
+      },
+      {
+        "@id": "minecraft:end/kill_dragon",
+        "@name": "\u00a0Free\u00a0the\u00a0 End",
+        "@short_name": "Free End"
+      },
+      {
+        "@id": "minecraft:end/dragon_egg",
+        "@name": "The Next Generation",
+        "@short_name": "Next Gen",
+        "@type": "goal"
+      },
+      {
+        "@id": "minecraft:end/enter_end_gateway",
+        "@name": "Remote Getaway",
+        "@short_name": "Getaway"
+      },
+      {
+        "@id": "minecraft:end/find_end_city",
+        "@name": "City at the End of the Game",
+        "@short_name": "End City",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:end/dragon_breath",
+        "@name": "You Need a\u00a0Mint",
+        "@short_name": "Need a Mint",
+        "@type": "goal"
+      },
+      {
+        "@id": "minecraft:end/respawn_dragon",
+        "@name": "The End... Again...",
+        "@short_name": "End Again",
+        "@type": "goal",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:end/elytra",
+        "@name": "Sky's the Limit",
+        "@short_name": "The Limit",
+        "@type": "goal",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:end/levitate",
+        "@name": "Great View From Here",
+        "@short_name": "Great View",
+        "@type": "challenge",
+        "@half": "false"
+      }
+    ]
+  },
+  {
+    "@name": "Husbandry",
+    "advancement": [
+      {
+        "@id": "minecraft:husbandry/root",
+        "@name": "Husbandry",
+        "@icon": "husbandry"
+      },
+      {
+        "@id": "minecraft:husbandry/plant_seed",
+        "@name": "A Seedy Place",
+        "@short_name": "Seedy Place"
+      },
+      {
+        "@id": "minecraft:husbandry/breed_an_animal",
+        "@name": "The Parrots and the Bats",
+        "@short_name": "Parrots"
+      },
+      {
+        "@id": "minecraft:husbandry/tame_an_animal",
+        "@name": "Best Friends Forever",
+        "@short_name": "BFF's"
+      },
+      {
+        "@id": "minecraft:husbandry/fishy_business",
+        "@name": "Fishy Business",
+        "@short_name": "Fishy Biz"
+      },
+      {
+        "@id": "minecraft:husbandry/tactical_fishing",
+        "@name": "Tactical Fishing",
+        "@short_name": "Tactical"
+      },
+      {
+        "@id": "minecraft:husbandry/silk_touch_nest",
+        "@name": "Total Beelocation",
+        "@short_name": "Beelocation",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:husbandry/safely_harvest_honey",
+        "@name": "Bee Our Guest",
+        "@short_name": "Our Guest",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:husbandry/obtain_netherite_hoe",
+        "@name": "Serious Dedication",
+        "@short_name": "Dedication",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:husbandry/bred_all_animals",
+        "@name": "Two by Two",
+        "@type": "challenge",
+        "@half": "false",
+        "criteria": {
+          "@goal": "Animals Bred",
+          "criterion": [
+            {
+              "@id": "minecraft:pig"
+            },
+            {
+              "@id": "minecraft:sheep"
+            },
+            {
+              "@id": "minecraft:chicken"
+            },
+            {
+              "@id": "minecraft:cow"
+            },
+            {
+              "@id": "minecraft:mooshroom"
+            },
+            {
+              "@id": "minecraft:cat"
+            },
+            {
+              "@id": "minecraft:ocelot"
+            },
+            {
+              "@id": "minecraft:wolf"
+            },
+            {
+              "@id": "minecraft:fox"
+            },
+            {
+              "@id": "minecraft:rabbit"
+            },
+            {
+              "@id": "minecraft:bee"
+            },
+            {
+              "@id": "minecraft:horse"
+            },
+            {
+              "@id": "minecraft:donkey"
+            },
+            {
+              "@id": "minecraft:mule"
+            },
+            {
+              "@id": "minecraft:llama"
+            },
+            {
+              "@id": "minecraft:panda"
+            },
+            {
+              "@id": "minecraft:turtle"
+            },
+            {
+              "@id": "minecraft:strider"
+            },
+            {
+              "@id": "minecraft:hoglin"
+            }
+          ]
+        }
+      },
+      {
+        "@id": "minecraft:husbandry/balanced_diet",
+        "@name": "A Balanced Diet",
+        "@short_name": "ABD",
+        "@type": "challenge",
+        "@half": "false",
+        "criteria": {
+          "@goal": "Foods Eaten",
+          "criterion": [
+            {
+              "@id": "bread"
+            },
+            {
+              "@id": "cooked_porkchop",
+              "@name": "Porkchop"
+            },
+            {
+              "@id": "porkchop",
+              "@name": "Raw Porkchop"
+            },
+            {
+              "@id": "cooked_beef",
+              "@name": "Beef"
+            },
+            {
+              "@id": "beef",
+              "@name": "Raw Beef"
+            },
+            {
+              "@id": "cooked_chicken",
+              "@name": "Chicken"
+            },
+            {
+              "@id": "chicken",
+              "@name": "Raw Chicken",
+              "@icon": "raw_chicken"
+            },
+            {
+              "@id": "cooked_mutton",
+              "@name": "Mutton"
+            },
+            {
+              "@id": "mutton",
+              "@name": "Raw Mutton"
+            },
+            {
+              "@id": "cooked_rabbit",
+              "@name": "Rabbit"
+            },
+            {
+              "@id": "rabbit",
+              "@name": "Raw Rabbit",
+              "@icon": "raw_rabbit"
+            },
+            {
+              "@id": "cooked_cod",
+              "@name": "Cod"
+            },
+            {
+              "@id": "cod",
+              "@name": "Raw Cod"
+            },
+            {
+              "@id": "tropical_fish"
+            },
+            {
+              "@id": "cooked_salmon",
+              "@name": "Salmon"
+            },
+            {
+              "@id": "salmon",
+              "@name": "Raw Salmon"
+            },
+            {
+              "@id": "pufferfish"
+            },
+            {
+              "@id": "cookie"
+            },
+            {
+              "@id": "pumpkin_pie"
+            },
+            {
+              "@id": "apple"
+            },
+            {
+              "@id": "golden_apple"
+            },
+            {
+              "@id": "enchanted_golden_apple",
+              "@name": "God Apple"
+            },
+            {
+              "@id": "golden_carrot"
+            },
+            {
+              "@id": "carrot"
+            },
+            {
+              "@id": "melon_slice"
+            },
+            {
+              "@id": "baked_potato"
+            },
+            {
+              "@id": "potato"
+            },
+            {
+              "@id": "poisonous_potato",
+              "@name": "Poison Potato"
+            },
+            {
+              "@id": "beetroot"
+            },
+            {
+              "@id": "sweet_berries"
+            },
+            {
+              "@id": "chorus_fruit"
+            },
+            {
+              "@id": "mushroom_stew",
+              "@name": "Shroom Stew"
+            },
+            {
+              "@id": "suspicious_stew",
+              "@name": "Sus Stew"
+            },
+            {
+              "@id": "rabbit_stew"
+            },
+            {
+              "@id": "beetroot_soup",
+              "@name": "Beet Soup"
+            },
+            {
+              "@id": "dried_kelp"
+            },
+            {
+              "@id": "honey_bottle"
+            },
+            {
+              "@id": "rotten_flesh"
+            },
+            {
+              "@id": "spider_eye"
+            }
+          ]
+        }
+      },
+      {
+        "@id": "minecraft:husbandry/complete_catalogue",
+        "@name": "A Complete Catalogue",
+        "@short_name": "Catalogue",
+        "@type": "challenge",
+        "@half": "false",
+        "criteria": {
+          "@goal": "Cats",
+          "criterion": [
+            {
+              "@id": "textures/entity/cat/jellie.png",
+              "@name": "Jellie",
+              "@icon": "jellie"
+            },
+            {
+              "@id": "textures/entity/cat/calico.png",
+              "@name": "Calico",
+              "@icon": "calico"
+            },
+            {
+              "@id": "textures/entity/cat/red.png",
+              "@name": "Red",
+              "@icon": "red"
+            },
+            {
+              "@id": "textures/entity/cat/black.png",
+              "@name": "Tuxedo",
+              "@icon": "tuxedo"
+            },
+            {
+              "@id": "textures/entity/cat/white.png",
+              "@name": "White",
+              "@icon": "white"
+            },
+            {
+              "@id": "textures/entity/cat/ragdoll.png",
+              "@name": "Ragdoll",
+              "@icon": "ragdoll"
+            },
+            {
+              "@id": "textures/entity/cat/british_shorthair.png",
+              "@name": "British",
+              "@icon": "british_shorthair"
+            },
+            {
+              "@id": "textures/entity/cat/tabby.png",
+              "@name": "Tabby",
+              "@icon": "tabby"
+            },
+            {
+              "@id": "textures/entity/cat/all_black.png",
+              "@name": "Black",
+              "@icon": "black"
+            },
+            {
+              "@id": "textures/entity/cat/persian.png",
+              "@name": "Persian",
+              "@icon": "persian"
+            },
+            {
+              "@id": "textures/entity/cat/siamese.png",
+              "@name": "Siamese",
+              "@icon": "siamese"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "@name": "Minecraft",
+    "advancement": [
+      {
+        "@id": "minecraft:story/mine_stone",
+        "@name": "Stone Age"
+      },
+      {
+        "@id": "minecraft:story/upgrade_tools",
+        "@name": "Getting an Upgrade",
+        "@short_name": "Upgrade"
+      },
+      {
+        "@id": "minecraft:story/iron_tools",
+        "@name": "Isn't It Iron\u00a0Pick",
+        "@short_name": "Iron Pick"
+      },
+      {
+        "@id": "minecraft:story/smelt_iron",
+        "@name": "Acquire Hardware",
+        "@short_name": "Hardware"
+      },
+      {
+        "@id": "minecraft:story/mine_diamond",
+        "@name": "Diamonds!"
+      },
+      {
+        "@id": "minecraft:story/lava_bucket",
+        "@name": "Hot Stuff"
+      },
+      {
+        "@id": "minecraft:story/form_obsidian",
+        "@name": "Ice Bucket Challenge",
+        "@short_name": "Ice Bucket"
+      },
+      {
+        "@id": "minecraft:story/enter_the_nether",
+        "@name": "We Need to Go Deeper",
+        "@short_name": "Go Deeper"
+      },
+      {
+        "@id": "minecraft:story/obtain_armor",
+        "@name": "Suit Up"
+      },
+      {
+        "@id": "minecraft:story/shiny_gear",
+        "@name": "Cover Me With Diamonds",
+        "@short_name": "W/Diamonds"
+      },
+      {
+        "@id": "minecraft:story/cure_zombie_villager",
+        "@name": "Zombie Doctor",
+        "@short_name": "Zombie Doc",
+        "@type": "goal",
+        "@hidden": "compact",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:story/root",
+        "@name": "Minecraft",
+        "@icon": "grass",
+        "@hidden": "relaxed"
+      },
+      {
+        "@id": "minecraft:story/deflect_arrow",
+        "@name": "Not Today, Thank You",
+        "@short_name": "Not Today"
+      },
+      {
+        "@id": "minecraft:story/follow_ender_eye",
+        "@name": "Eye Spy"
+      },
+      {
+        "@id": "minecraft:story/enter_the_end",
+        "@name": "The End?",
+        "@icon": "end"
+      },
+      {
+        "@id": "minecraft:story/enchant_item",
+        "@name": "Enchanter",
+        "@half": "false"
+      }
+    ]
+  },
+  {
+    "@name": "Nether",
+    "advancement": [
+      {
+        "@id": "minecraft:nether/return_to_sender",
+        "@name": "Return to Sender",
+        "@short_name": "Sender",
+        "@type": "challenge"
+      },
+      {
+        "@id": "minecraft:nether/use_lodestone",
+        "@name": "Country\u00a0Lode, Take Me Home",
+        "@short_name": "Lodestone",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/charge_respawn_anchor",
+        "@name": "Not Quite \"Nine\" Lives",
+        "@short_name": "Nine Lives"
+      },
+      {
+        "@id": "minecraft:nether/obtain_crying_obsidian",
+        "@name": "Who's Cutting Onions?",
+        "@short_name": "Onions?"
+      },
+      {
+        "@id": "minecraft:nether/loot_bastion",
+        "@name": "War Pigs"
+      },
+      {
+        "@id": "minecraft:nether/find_bastion",
+        "@name": "Those Were the Days",
+        "@short_name": "The Days"
+      },
+      {
+        "@id": "minecraft:nether/find_fortress",
+        "@name": "A Terrible Fortress",
+        "@short_name": "Fortress"
+      },
+      {
+        "@id": "minecraft:nether/root",
+        "@name": "Nether",
+        "@icon": "nether"
+      },
+      {
+        "@id": "minecraft:nether/uneasy_alliance",
+        "@name": "Uneasy Alliance",
+        "@short_name": "Uneasy",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/fast_travel",
+        "@name": "Subspace Bubble",
+        "@short_name": "Subspace",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/brew_potion",
+        "@name": "Local Brewery",
+        "@short_name": "Brewery"
+      },
+      {
+        "@id": "minecraft:nether/obtain_blaze_rod",
+        "@name": "Into Fire"
+      },
+      {
+        "@id": "minecraft:nether/distract_piglin",
+        "@name": "Oh Shiny"
+      },
+      {
+        "@id": "minecraft:nether/obtain_ancient_debris",
+        "@name": "Hidden in the\u00a0Depths",
+        "@short_name": "The Depths"
+      },
+      {
+        "@id": "minecraft:nether/explore_nether",
+        "@name": "Hot Tourist Destinations",
+        "@short_name": "Hot Tourist",
+        "@type": "challenge",
+        "criteria": {
+          "@goal": "Visited",
+          "criterion": [
+            {
+              "@id": "minecraft:nether_wastes",
+              "@short_name": "Wastes",
+              "@type": "challenge"
+            },
+            {
+              "@id": "minecraft:crimson_forest",
+              "@short_name": "Crimson",
+              "@type": "challenge"
+            },
+            {
+              "@id": "minecraft:warped_forest",
+              "@short_name": "Warped",
+              "@type": "challenge"
+            },
+            {
+              "@id": "minecraft:basalt_deltas",
+              "@short_name": "Basalt",
+              "@type": "challenge"
+            },
+            {
+              "@id": "minecraft:soul_sand_valley",
+              "@short_name": "Soul Sand",
+              "@type": "challenge"
+            }
+          ]
+        }
+      },
+      {
+        "@id": "minecraft:nether/netherite_armor",
+        "@name": "Cover Me in\u00a0Debris",
+        "@short_name": "In Debris",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/all_effects",
+        "@name": "How Did We Get Here?",
+        "@short_name": "HDWGH",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/all_potions",
+        "@name": "A Furious Cocktail",
+        "@short_name": "Cocktail",
+        "@type": "challenge",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/create_full_beacon",
+        "@name": "Beaconator",
+        "@short_name": "Beaconator",
+        "@icon": "beacon",
+        "@type": "goal",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/create_beacon",
+        "@name": "Bring Home the Beacon",
+        "@short_name": "Beacon",
+        "@icon": "beacon",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/summon_wither",
+        "@name": "Withering Heights",
+        "@short_name": "Withering",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/get_wither_skull",
+        "@name": "Spooky\u00a0Scary Skeleton",
+        "@short_name": "Spooky",
+        "@half": "false"
+      },
+      {
+        "@id": "minecraft:nether/ride_strider",
+        "@name": "This Boat Has Legs",
+        "@short_name": "This Boat",
+        "@half": "false"
+      }
+    ]
+  }
+]

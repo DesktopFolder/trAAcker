@@ -6,6 +6,8 @@
 #include "src/ConfigProvider.hpp"
 #include "include/dmon.hpp"
 #include "src/WindowManager.hpp"
+#include "src/ResourceManager.hpp"
+#include "src/Overlay.hpp"
 
 #include "src/TurnTable.hpp"
 
@@ -29,8 +31,10 @@ int main()
     //sf::View view;
     
     //aa::RingBuffer<aa::Tile> rb;
-    aa::TurnTable tb;
-    tb.rb_.buf().emplace_back("conduit", text);
+    // aa::TurnTable tb;
+    //tb.rb_.buf().emplace_back("conduit", text);
+
+    aa::OverlayManager ov;
 
     // Initialize the view to a rectangle located at (100, 100) and with a size of 400x200
     //view.reset(sf::FloatRect(0, 0, 400, 400));
@@ -42,10 +46,11 @@ int main()
     // should really be overlay.rate but whatever
     uint8_t rate = 0;
     if (conf.contains("rate")) {
-        tb.rate_ = static_cast<uint8_t>(conf["rate"].template get<int>());
+        ov.setRate(static_cast<uint8_t>(conf["rate"].template get<int>()));
     }
     uint64_t ticks = 0;
 
+    auto& rm = aa::ResourceManager::instance();
     auto& wm = aa::WindowManager::instance();
     while (!wm.is_shutdown())
     {
@@ -65,7 +70,7 @@ int main()
             window.draw(s);
         }
         */
-        tb.animateDraw(window);
+        ov.render(window);
 
         // Render loop end.
         wm.displayAll();

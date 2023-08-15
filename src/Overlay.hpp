@@ -5,23 +5,26 @@
 // Oh, how the turn tables.
 #include "TurnTable.hpp"
 
-namespace aa {
-struct Overlay {
+namespace aa
+{
+struct OverlayManager
+{
     TurnTable prereqs;
     TurnTable reqs;
     sf::Texture testText;
 
-    Overlay() {
-        prereqs.yOffset_ = reqs.PADDING;
-        reqs.yOffset_ = reqs.TILE_SIZE;
+    OverlayManager();
 
-        // testing code
-        testText.loadFromFile("assets/sprites/global/items/conduit^48.png");
+    void setRate(uint8_t rate)
+    {
+        prereqs.rate_ = rate;
+        reqs.rate_    = rate;
     }
 
-    void render(sf::RenderWindow& win) {
+    void render(sf::RenderWindow& win)
+    {
         prereqs.animateDraw(win);
         reqs.animateDraw(win);
     }
 };
-}
+}  // namespace aa
