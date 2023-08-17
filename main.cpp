@@ -4,10 +4,10 @@
 #include <iostream>
 
 #include "src/ConfigProvider.hpp"
-#include "include/dmon.hpp"
 #include "src/WindowManager.hpp"
 #include "src/ResourceManager.hpp"
 #include "src/Overlay.hpp"
+#include "src/FileProvider.hpp"
 
 #include "src/TurnTable.hpp"
 
@@ -16,8 +16,6 @@
 
 int main()
 {
-    auto w = dmon::Manager::instance().add_watch("./testdir");
-    auto w2 = dmon::Manager::instance().add_filewatch("./testdir", "filename");
     auto& window     = aa::WindowManager::instance().getOverlay();
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(true);
@@ -46,6 +44,7 @@ int main()
     }
     uint64_t ticks = 0;
 
+    aa::CurrentFileProvider fp;
     auto& rm = aa::ResourceManager::instance();
     auto& wm = aa::WindowManager::instance();
     while (!wm.is_shutdown())
@@ -53,6 +52,9 @@ int main()
         // Handle events. We may need to add more stuff in here later.
         wm.handleEvents();
         wm.clearAll();
+
+        // poll after handling events...
+        fp.poll();
 
         if (ticks % 60 == 0) {
             // call: providergetturntable?
