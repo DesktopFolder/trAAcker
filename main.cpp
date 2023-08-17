@@ -16,12 +16,8 @@
 
 int main()
 {
-    /*
     auto w = dmon::Manager::instance().add_watch("./testdir");
-    while (!w.triggered_) {
-
-    }
-    */
+    auto w2 = dmon::Manager::instance().add_filewatch("./testdir", "filename");
     auto& window     = aa::WindowManager::instance().getOverlay();
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(true);

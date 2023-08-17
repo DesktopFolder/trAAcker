@@ -57,6 +57,7 @@ add_executable(
     src/Overlay.cpp src/Overlay.hpp
     src/WindowManager.cpp src/WindowManager.hpp
     src/ResourceManager.cpp src/ResourceManager.hpp
+    src/FileProvider.cpp src/FileProvider.hpp
     main.cpp)
 
 if(${SANITIZE} STREQUAL "address")
@@ -65,7 +66,7 @@ if(${SANITIZE} STREQUAL "address")
     add_link_options(-fsanitize=address)
 endif()
 
-# target_include_directories(AAToolCPP PRIVATE "src/")
+target_include_directories(AAToolCPP PRIVATE "include/")
 #target_link_libraries(AAToolCPP PRIVATE
 #    # RmlUi::RmlUi
 #    )
