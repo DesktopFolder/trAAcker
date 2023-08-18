@@ -1,9 +1,33 @@
 #include "ResourceManager.hpp"
 
+#include <filesystem>
+
 aa::ResourceManager& aa::ResourceManager::instance()
 {
     static aa::ResourceManager mgr{};
     return mgr;
+}
+
+std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets() {
+    namespace fs = std::filesystem;
+
+    std::unordered_map<std::string, std::string> assets; 
+
+    for (const fs::directory_entry& dir_entry : 
+        fs::recursive_directory_iterator("assets/sprites/global/"))
+    {
+        if (!dir_entry.is_regular_file()) continue;
+        const auto p = dir_entry.path();
+        const auto s = p.string();
+        if (!s.ends_with(".png")) continue;
+        if (assets.contains(assetName(s))) {
+            // we have this asset loaded already
+            // continue unless this is HIGH RESOLUTION OOOO
+            if (s.size() < 3 || s[s.size() - 3] != '^') continue;
+        }
+        assets.emplace(assetName(s), s);
+    }
+    return assets;
 }
 
 void aa::ResourceManager::loadCriteria(std::string path, std::string name)

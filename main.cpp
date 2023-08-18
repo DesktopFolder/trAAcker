@@ -2,6 +2,7 @@
 #include <SFML/Window.hpp>
 #include <filesystem>
 #include <iostream>
+#include <thread>
 
 #include "src/ConfigProvider.hpp"
 #include "src/WindowManager.hpp"
@@ -74,8 +75,8 @@ int main()
         wm.displayAll();
 
         // Give control to the OS - we don't want to consume too many resources.
-        usleep(0);
-        ticks += 1;
+        std::this_thread::sleep_for(std::chrono::seconds(0));
+        ticks += 1; // it's the completed # of ticks
     }
     if (mainwindow.isOpen())
     {
