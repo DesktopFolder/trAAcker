@@ -1,6 +1,7 @@
 #pragma once
 
 #include <atomic>
+#include <mutex>
 #include <cassert>
 #include <iostream>
 #include <memory>
