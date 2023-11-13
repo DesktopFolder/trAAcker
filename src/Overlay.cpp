@@ -19,7 +19,8 @@ std::string parseID(auto& j) {
 
 std::string parseIcon(auto& j) {
     if (j.contains("@icon")) return j["@icon"].template get<std::string>();
-    return parseID(j);
+    //return parseID(j);
+    return "";
 }
 
 aa::OverlayManager::OverlayManager() {
@@ -28,8 +29,8 @@ aa::OverlayManager::OverlayManager() {
 
     // testing code
     testText.loadFromFile("assets/sprites/global/items/conduit^48.png");
-    prereqs.rb_.buf().emplace_back("conduit", testText);
-    reqs.rb_.buf().emplace_back("conduit", testText);
+    prereqs.rb_.buf().emplace_back("conduit", &testText);
+    reqs.rb_.buf().emplace_back("conduit", &testText);
 
     std::ifstream f("advancements.json");
     if (!f.good()) throw std::runtime_error("No advancements.json found");
@@ -41,20 +42,21 @@ aa::OverlayManager::OverlayManager() {
     for (auto& k : advancements) {
         std::cout << "Found advancement category: " << k["@name"] << std::endl;
         const std::string cat = k["@name"].get<std::string>();
-        for (auto& a : advancements["advancement"]) {
+        for (auto& a : k["advancement"]) {
             this->advancements.emplace_back(cat, parseID(a), parseIcon(a));
             auto& adv = this->advancements.back();
             if (adv.icon != "") {
                 if (not assets.contains(adv.icon)) throw std::runtime_error("Could not find icon " + adv.icon);
-                sf::Texture t;
-                t.loadFromFile(assets[adv.icon]);
-                reqs.rb_.buf().emplace_back(adv.name, t);
+                reqs.rb_.buf().emplace_back(adv.name, rm.store_texture_at(assets[adv.icon]));
+                std::cout << "Loaded from file: " << assets[adv.icon] << std::endl;
                 continue;
             }
             // try and load it based on the name
-            std::cout << "Name: " << adv.name;
+            std::cout << "Could not load name: " << adv.name << std::endl;
         }
     }
+
+    std::cout << "Properly loaded " << reqs.rb_.buf().size() << " tiles." << std::endl;
 }
 
 void aa::OverlayManager::reset() {

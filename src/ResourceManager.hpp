@@ -3,6 +3,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <string>
 #include <unordered_map>
+#include <memory>
 
 namespace aa
 {
@@ -22,7 +23,17 @@ struct ResourceManager
     }
     void loadAllCriteria();
 
+    void commit() { no_load = true; }
+
     void ensureLoadAdvancement(std::string id, std::string icon);
+
+    sf::Texture* store_texture_at(std::string path) {
+        random_textures.emplace_back(std::make_unique<sf::Texture>());
+        random_textures.back()->loadFromFile(path);
+        return random_textures.back().get();
+    }
+
+    std::vector<std::unique_ptr<sf::Texture>> random_textures;
 
     std::unordered_map<std::string, std::unordered_map<std::string, sf::Texture>> criteria;
 private:
@@ -30,5 +41,6 @@ private:
     void loadCriteria(std::string, std::string);
     // IMPLEMENTATION DETAIL DON'T LOOK IT IS VERY BAD :)
     std::unordered_map<std::string, sf::Texture>* current_ = nullptr;
+    bool no_load = false;
 };
 }  // namespace aa

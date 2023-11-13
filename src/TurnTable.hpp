@@ -11,18 +11,34 @@ struct TurnTable
     void animateDraw(sf::RenderWindow& win) {
         if (rb_.size() == 0) return;
 
-        sf::Sprite sprite;
+        sf::Sprite sprite16;
+        sf::Sprite sprite32;
+        sf::Sprite sprite48;
+        sprite16.setScale(3, 3);
+        sprite32.setScale(1.5, 1.5);
 
         const auto winX = win.getSize().x;
 
         const auto TO_DRAW = (winX / TurnTable::TILE_SIZE) + 2;
 
         for (int64_t i = 0; i < TO_DRAW; i++) {
-            sprite.setPosition(static_cast<float>((TILE_SIZE * i) - offset_) + 8.f, yOffset_);
+            sf::Sprite* sprite;
             // set the texture of the sprite
             const auto& [name, texture, draw_bg] = rb_.get(i);
-            sprite.setTexture(texture);
-            win.draw(sprite);
+            const auto xv = texture->getSize().x;
+            if (xv == 16) {
+                sprite = &sprite16;
+            }
+            else if (xv == 32) {
+                sprite = &sprite32;
+            }
+            else {
+                assert(xv == 48);
+                sprite = &sprite48;
+            }
+            sprite->setTexture(*texture);
+            sprite->setPosition(static_cast<float>((TILE_SIZE * i) - offset_) + 8.f, yOffset_);
+            win.draw(*sprite);
         }
         
         // now we animate, because we're bad, and this is easier, and then we start from 0
