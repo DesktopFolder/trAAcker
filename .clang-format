@@ -1,0 +1,16 @@
+---
+BreakBeforeBraces: Allman
+AlwaysBreakTemplateDeclarations: true
+AccessModifierOffset: -4
+PointerAlignment: Left
+ColumnLimit: 99
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: true
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+AlignOperands: true
+AlignTrailingComments: true
+AlignConsecutiveAssignments: true
+Standard: C++11

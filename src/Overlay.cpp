@@ -1,4 +1,5 @@
 #include "Overlay.hpp"
+#include "logging.hpp"
 
 #include <fstream>
 #include <iostream>

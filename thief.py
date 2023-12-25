@@ -51,13 +51,13 @@ def to_constexpr(d: dict[str, str]):
     nom = id_.rsplit('/', 1)[1]
     return item.format(nom, id_, name_, icon_, type_, short_name_, ).replace('||', '{', 1).replace('||', '}', 1).replace('"{}"', '{}')
 
-def thievery():
+def thievery(root):
     l = ['adventure', 'end', 'husbandry', 'nether', 'minecraft']
     src = open("include/.advancements.hpp").read()
     of = open("include/advancements.hpp", "w")
     of.write(src)
     for y in l:
-        with open(f"../oss/ctm/AATool/assets/objectives/1.16/advancements/{y}.xml") as file:
+        with open(f"{root}/AATool/assets/objectives/1.16/advancements/{y}.xml") as file:
             loc = [x.strip() for x in file.readlines()]
         for ln in loc:
             if ln.startswith('<advancement'):
@@ -77,4 +77,6 @@ def thievery():
 
 
 if __name__ == "__main__":
-    thievery()
+    import sys
+    root = sys.argv[1]
+    thievery(root)

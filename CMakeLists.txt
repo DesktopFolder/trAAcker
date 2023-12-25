@@ -88,6 +88,7 @@ add_executable(
     AAToolCPP
     # Library things
     include/dmon.cpp include/dmon.hpp
+    include/logging.cpp include/logging.hpp
     # Source things? Hmmm
     src/Overlay.cpp src/Overlay.hpp
     src/WindowManager.cpp src/WindowManager.hpp

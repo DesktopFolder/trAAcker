@@ -3,12 +3,13 @@
 #include <atomic>
 #include <mutex>
 #include <cassert>
-#include <iostream>
 #include <memory>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
+
+#include "src/logging.hpp"
 
 namespace dmon
 {

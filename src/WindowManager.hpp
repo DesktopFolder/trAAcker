@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <cstdint>
+#include <string>
 
 // WindowManager.hpp
 // For a reimplementation of AATool, we likely only require three distinct

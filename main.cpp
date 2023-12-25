@@ -9,11 +9,10 @@
 #include "src/ResourceManager.hpp"
 #include "src/Overlay.hpp"
 #include "src/FileProvider.hpp"
+#include "src/logging.hpp"
 
 #include "src/TurnTable.hpp"
 
-// for now, just do everything in this one file
-// to get used to marks. and not out of laziness. yeah.
 
 int main()
 {
@@ -48,6 +47,8 @@ int main()
     aa::CurrentFileProvider fp;
     auto& rm = aa::ResourceManager::instance();
     auto& wm = aa::WindowManager::instance();
+
+    log::debug("Starting main window loop.");
     while (!wm.is_shutdown())
     {
         // Handle events. We may need to add more stuff in here later.

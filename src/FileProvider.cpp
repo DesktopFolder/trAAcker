@@ -2,6 +2,7 @@
 
 #include "ConfigProvider.hpp"
 #include "dmon.hpp"
+#include "logging.hpp"
 
 aa::CurrentFileProvider::CurrentFileProvider()
 {
@@ -20,8 +21,8 @@ std::optional<std::string> aa::CurrentFileProvider::poll()
     if (const auto changed = watcher.get_change(); changed.has_value())
     {
         // the (saves) directory being watched has updates :)
-        std::cout << "watcher with changes: " << watcher.dir_ << " of: " << changed.value()
-                  << std::endl;
+        get_logger("FileProvider")
+            .debug("watcher with changes: ", watcher.dir_, " of: ", changed.value());
     }
     return watcher.get_change();
 }
