@@ -9,7 +9,7 @@
 #include "src/ResourceManager.hpp"
 #include "src/Overlay.hpp"
 #include "src/FileProvider.hpp"
-#include "src/logging.hpp"
+#include "logging.hpp"
 
 #include "src/TurnTable.hpp"
 

@@ -1,15 +1,15 @@
 #pragma once
 
 #include <atomic>
-#include <mutex>
 #include <cassert>
 #include <memory>
+#include <mutex>
 #include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
 
-#include "src/logging.hpp"
+#include "logging.hpp"
 
 namespace dmon
 {
@@ -30,17 +30,18 @@ struct WatchData
 
     void check_change(std::string_view file_path)
     {
-        std::cout << "Watching " << file_watched << ", found " << file_path << std::endl;
+        const auto& logger = get_logger("dmon");
+        logger.debug("Watching '", file_watched, "', found ", file_path);
         if (file_watched.empty() || file_path == file_watched)
         {
-            std::cout << "Storing changes!" << std::endl;
+            logger.debug("Storing the fact that we found changes.");
             std::lock_guard l(change_guard);
             change = file_path;
             has_modifications.store(true);
         }
     }
 };
-}  // namespace impl
+} // namespace impl
 
 struct Watch
 {
@@ -49,8 +50,7 @@ struct Watch
     // Movement and deletion constructors.
     // Handles empty ids (not constructed, etc)
     Watch(Watch&& other)
-        : id_(std::exchange(other.id_, {})),
-          dir_(std::move(other.dir_)),
+        : id_(std::exchange(other.id_, {})), dir_(std::move(other.dir_)),
           data_{std::move(other.data_)}
     {
     }
@@ -88,7 +88,7 @@ struct Watch
 
     void deactivate();
 
-    std::string dir_;  // don't modify this :)
+    std::string dir_; // don't modify this :)
 
 private:
     Watch(std::string dirname, std::string filename = "");
@@ -117,4 +117,4 @@ private:
     Manager();
     ~Manager();
 };
-}  // namespace dmon
+} // namespace dmon

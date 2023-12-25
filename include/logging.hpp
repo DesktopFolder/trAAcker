@@ -15,7 +15,7 @@
 struct Logger
 {
     // Not super configurable, but it works for now.
-    std::optional<std::ofstream> file;
+    mutable std::optional<std::ofstream> file;
     bool write_stdout{true};
 
     Logger(std::string name)
@@ -28,32 +28,32 @@ struct Logger
     // Level 0 - Only logged when we are at the most verbose.
     // Anything that would hugely spam the logs should be under this.
     template <typename... Ts>
-    void debug(Ts&&... ts)
+    void debug(Ts&&... ts) const
     {
         write_endl(str_debug_, std::forward<Ts>(ts)...);
     }
 
     template <typename... Ts>
-    void info(Ts&&... ts)
+    void info(Ts&&... ts) const
     {
-        write_endl(str_debug_, std::forward<Ts>(ts)...);
+        write_endl(str_info_, std::forward<Ts>(ts)...);
     }
 
     template <typename... Ts>
-    void warning(Ts&&... ts)
+    void warning(Ts&&... ts) const
     {
-        write_endl(str_debug_, std::forward<Ts>(ts)...);
+        write_endl(str_warning_, std::forward<Ts>(ts)...);
     }
 
     template <typename... Ts>
-    void error(Ts&&... ts)
+    void error(Ts&&... ts) const
     {
-        write_endl(str_debug_, std::forward<Ts>(ts)...);
+        write_endl(str_error_, std::forward<Ts>(ts)...);
     }
 
 private:
     template <typename T>
-    void write(T&& t)
+    void write(T&& t) const
     {
         if (file)
         {
@@ -66,14 +66,14 @@ private:
     }
 
     template <typename T, typename... Ts>
-    void write(T&& t, Ts&&... ts)
+    void write(T&& t, Ts&&... ts) const
     {
         write(std::forward<T>(t));
         write(std::forward<Ts>(ts)...);
     }
 
     template <typename... Ts>
-    void write_endl(Ts&&... ts)
+    void write_endl(Ts&&... ts) const
     {
         write(std::forward<Ts>(ts)...);
         // Doesn't work, not sure why, no google atm...
