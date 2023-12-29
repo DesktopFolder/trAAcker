@@ -14,7 +14,7 @@ struct ResourceManager
     static std::string assetName(std::string filePath) {
         if (filePath.size() < 3) return filePath;
         // remove .png
-        if (filePath.ends_with(".png")) filePath = filePath.substr(0, filePath.size() - 4);
+        if (filePath.ends_with(".png") || filePath.ends_with(".gif")) filePath = filePath.substr(0, filePath.size() - 4);
         if (filePath[filePath.size() - 3] == '^') return assetName(std::string{filePath.begin(), filePath.end() - 3});
 
         auto it = std::find(filePath.crbegin(), filePath.crend(), '/');
@@ -35,11 +35,15 @@ struct ResourceManager
 
     std::vector<std::unique_ptr<sf::Texture>> random_textures;
 
+    // unused atm
     std::unordered_map<std::string, std::unordered_map<std::string, sf::Texture>> criteria;
+    // use this for now
+    std::unordered_map<std::string, sf::Texture> test_criteria;
 private:
     ResourceManager() { loadAllCriteria(); }
     void loadCriteria(std::string, std::string);
     // IMPLEMENTATION DETAIL DON'T LOOK IT IS VERY BAD :)
+    // later: wtf
     std::unordered_map<std::string, sf::Texture>* current_ = nullptr;
     bool no_load = false;
 };

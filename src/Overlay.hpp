@@ -5,6 +5,8 @@
 // Oh, how the turn tables.
 #include "TurnTable.hpp"
 #include "ResourceManager.hpp"
+#include "Advancements.hpp"
+#include "utilities.hpp"
 
 #include <vector>
 
@@ -49,5 +51,7 @@ struct OverlayManager
         prereqs.animateDraw(win);
         reqs.animateDraw(win);
     }
+
+    void update_with(string_map<::Advancement>& advs);
 };
 }  // namespace aa

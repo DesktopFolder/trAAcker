@@ -4,44 +4,51 @@
 #include <iostream>
 #include <thread>
 
-#include "src/ConfigProvider.hpp"
-#include "src/WindowManager.hpp"
-#include "src/ResourceManager.hpp"
-#include "src/Overlay.hpp"
-#include "src/FileProvider.hpp"
 #include "logging.hpp"
+#include "src/ConfigProvider.hpp"
+#include "src/FileProvider.hpp"
+#include "src/Overlay.hpp"
+#include "src/ResourceManager.hpp"
+#include "src/WindowManager.hpp"
 
 #include "src/TurnTable.hpp"
-
+#include "src/Advancements.hpp"
 
 int main()
 {
+    // Leave this at the start of main to ensure correct shutdown order.
+    // Um... sort of dumb, but I believe in 'dumb but works until I fix it'
+    // as opposed to 'leaving a gun on the table with the safety off'.
+    const auto& _ = detail::get_files();
+
+    auto& conf = aa::conf::get();
+    if (const auto logfile = aa::conf::get_if<std::string>(conf, "log"); logfile.has_value())
+    {
+        set_default_file(logfile.value());
+    }
+
     auto& window     = aa::WindowManager::instance().getOverlay();
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(true);
-    auto text = sf::Texture{};
-    text.loadFromFile("assets/sprites/global/items/conduit^48.png");
-    sf::Sprite s(text);
-    //sf::View view;
-    
-    //aa::RingBuffer<aa::Tile> rb;
-    // aa::TurnTable tb;
-    //tb.rb_.buf().emplace_back("conduit", text);
+    // sf::View view;
+
+    // aa::RingBuffer<aa::Tile> rb;
+    //  aa::TurnTable tb;
+    // tb.rb_.buf().emplace_back("conduit", text);
 
     aa::OverlayManager ov;
+    // should really be overlay.rate but whatever
+    if (conf.contains("rate"))
+    {
+        ov.setRate(static_cast<uint8_t>(conf["rate"].template get<int>()));
+    }
 
     // Initialize the view to a rectangle located at (100, 100) and with a size of 400x200
-    //view.reset(sf::FloatRect(0, 0, 400, 400));
+    // view.reset(sf::FloatRect(0, 0, 400, 400));
 
     // where we render on the destination.
     // view.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 1.f));
 
-    auto& conf = aa::conf::get();
-    // should really be overlay.rate but whatever
-    uint8_t rate = 0;
-    if (conf.contains("rate")) {
-        ov.setRate(static_cast<uint8_t>(conf["rate"].template get<int>()));
-    }
     uint64_t ticks = 0;
 
     aa::CurrentFileProvider fp;
@@ -52,13 +59,30 @@ int main()
     while (!wm.is_shutdown())
     {
         // Handle events. We may need to add more stuff in here later.
-        wm.handleEvents();
+        auto events = wm.handleEvents();
+        for (auto& event : events)
+        {
+            if (event.type == sf::Event::KeyReleased)
+            {
+                if (event.key.code == sf::Keyboard::A)
+                {
+                    log::debug("Got the key A!");
+                }
+                else if (event.key.code == sf::Keyboard::B)
+                {
+                    log::debug("Parsing test advancements file (1) - testing/all-everything.json");
+                    auto advancements = get_advancements("testing/all-everything.json");
+                    ov.update_with(advancements);
+                }
+            }
+        }
         wm.clearAll();
 
         // poll after handling events...
         fp.poll();
 
-        if (ticks % 60 == 0) {
+        if (ticks % 60 == 0)
+        {
             // call: providergetturntable?
         }
 

@@ -10,5 +10,6 @@
     "rate": 2,
     "instance": {
         "saves": "testing/"
-    }
+    },
+    "log": "aatool.log"
 }

@@ -1,5 +1,7 @@
 #include "ResourceManager.hpp"
 
+#include "logging.hpp"
+
 #include <filesystem>
 
 aa::ResourceManager& aa::ResourceManager::instance()
@@ -8,25 +10,38 @@ aa::ResourceManager& aa::ResourceManager::instance()
     return mgr;
 }
 
-std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets() {
+void asset_helper(auto& dir_entry, auto& assets)
+{
+    if (!dir_entry.is_regular_file()) return;
+    const auto p = dir_entry.path();
+    const auto s = p.string();
+    if (not s.ends_with(".png") and not s.ends_with(".gif")) return;
+    if (assets.contains(aa::ResourceManager::assetName(s)))
+    {
+        // we have this asset loaded already
+        // continue unless this is HIGH RESOLUTION OOOO
+        if (s.size() < 3 || s[s.size() - 3] != '^') return;
+    }
+    assets.emplace(aa::ResourceManager::assetName(s), s);
+}
+
+std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()
+{
     namespace fs = std::filesystem;
 
-    std::unordered_map<std::string, std::string> assets; 
+    std::unordered_map<std::string, std::string> assets;
 
-    for (const fs::directory_entry& dir_entry : 
-        fs::recursive_directory_iterator("assets/sprites/global/"))
+    for (const fs::directory_entry& dir_entry :
+         fs::recursive_directory_iterator("assets/sprites/global/"))
     {
-        if (!dir_entry.is_regular_file()) continue;
-        const auto p = dir_entry.path();
-        const auto s = p.string();
-        if (!s.ends_with(".png")) continue;
-        if (assets.contains(assetName(s))) {
-            // we have this asset loaded already
-            // continue unless this is HIGH RESOLUTION OOOO
-            if (s.size() < 3 || s[s.size() - 3] != '^') continue;
-        }
-        assets.emplace(assetName(s), s);
+        asset_helper(dir_entry, assets);
     }
+    for (const fs::directory_entry& dir_entry :
+         fs::recursive_directory_iterator("assets/sprites/gif/"))
+    {
+        asset_helper(dir_entry, assets);
+    }
+
     return assets;
 }
 
@@ -36,22 +51,23 @@ void aa::ResourceManager::loadCriteria(std::string path, std::string name)
     sf::Texture text;
     text.loadFromFile(path);
     current_->emplace(name, text);
+    test_criteria.emplace(name, text);
 }
 
 void aa::ResourceManager::loadAllCriteria()
 {
     criteria["animals"] = {};
-    current_ = &criteria["animals"];
-    //loadCriteria("assets/sprites/global/criteria/animals/axolotl.png", "axolotl");
+    current_            = &criteria["animals"];
+    // loadCriteria("assets/sprites/global/criteria/animals/axolotl.png", "axolotl");
     loadCriteria("assets/sprites/global/criteria/animals/bee.png", "bee");
-    //loadCriteria("assets/sprites/global/criteria/animals/camel.png", "camel");
+    // loadCriteria("assets/sprites/global/criteria/animals/camel.png", "camel");
     loadCriteria("assets/sprites/global/criteria/animals/cat.png", "cat");
     loadCriteria("assets/sprites/global/criteria/animals/chicken.png", "chicken");
     loadCriteria("assets/sprites/global/criteria/animals/cow.png", "cow");
     loadCriteria("assets/sprites/global/criteria/animals/donkey.png", "donkey");
     loadCriteria("assets/sprites/global/criteria/animals/fox.png", "fox");
-    //loadCriteria("assets/sprites/global/criteria/animals/frog.png", "frog");
-    //loadCriteria("assets/sprites/global/criteria/animals/goat.png", "goat");
+    // loadCriteria("assets/sprites/global/criteria/animals/frog.png", "frog");
+    // loadCriteria("assets/sprites/global/criteria/animals/goat.png", "goat");
     loadCriteria("assets/sprites/global/criteria/animals/horse.png", "horse");
     loadCriteria("assets/sprites/global/criteria/animals/llama.png", "llama");
     loadCriteria("assets/sprites/global/criteria/animals/mooshroom.png", "mooshroom");
@@ -67,21 +83,25 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/animals/turtle.png", "turtle");
     loadCriteria("assets/sprites/global/criteria/animals/wolf.png", "wolf");
     criteria["biomes"] = {};
-    current_ = &criteria["biomes"];
+    current_           = &criteria["biomes"];
     loadCriteria("assets/sprites/global/criteria/biomes/badlands_plateau.png", "badlands_plateau");
     loadCriteria("assets/sprites/global/criteria/biomes/badlands.png", "badlands");
-    loadCriteria("assets/sprites/global/criteria/biomes/bamboo_jungle_hills.png", "bamboo_jungle_hills");
+    loadCriteria("assets/sprites/global/criteria/biomes/bamboo_jungle_hills.png",
+                 "bamboo_jungle_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/bamboo_jungle.png", "bamboo_jungle");
     loadCriteria("assets/sprites/global/criteria/biomes/basalt_deltas.png", "basalt_deltas");
     loadCriteria("assets/sprites/global/criteria/biomes/beach.png", "beach");
-    loadCriteria("assets/sprites/global/criteria/biomes/birch_forest_hills.png", "birch_forest_hills");
+    loadCriteria("assets/sprites/global/criteria/biomes/birch_forest_hills.png",
+                 "birch_forest_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/birch_forest.png", "birch_forest");
     loadCriteria("assets/sprites/global/criteria/biomes/cold_ocean.png", "cold_ocean");
     loadCriteria("assets/sprites/global/criteria/biomes/crimson_forest.png", "crimson_forest");
     loadCriteria("assets/sprites/global/criteria/biomes/dark_forest.png", "dark_forest");
     loadCriteria("assets/sprites/global/criteria/biomes/deep_cold_ocean.png", "deep_cold_ocean");
-    loadCriteria("assets/sprites/global/criteria/biomes/deep_frozen_ocean.png", "deep_frozen_ocean");
-    loadCriteria("assets/sprites/global/criteria/biomes/deep_lukewarm_ocean.png", "deep_lukewarm_ocean");
+    loadCriteria("assets/sprites/global/criteria/biomes/deep_frozen_ocean.png",
+                 "deep_frozen_ocean");
+    loadCriteria("assets/sprites/global/criteria/biomes/deep_lukewarm_ocean.png",
+                 "deep_lukewarm_ocean");
     loadCriteria("assets/sprites/global/criteria/biomes/deep_ocean.png", "deep_ocean");
     loadCriteria("assets/sprites/global/criteria/biomes/desert_hills.png", "desert_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/desert_lakes.png", "desert_lakes");
@@ -89,14 +109,16 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/biomes/forest_hills.png", "forest_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/forest.png", "forest");
     loadCriteria("assets/sprites/global/criteria/biomes/frozen_river.png", "frozen_river");
-    loadCriteria("assets/sprites/global/criteria/biomes/giant_tree_taiga_hills.png", "giant_tree_taiga_hills");
+    loadCriteria("assets/sprites/global/criteria/biomes/giant_tree_taiga_hills.png",
+                 "giant_tree_taiga_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/giant_tree_taiga.png", "giant_tree_taiga");
     loadCriteria("assets/sprites/global/criteria/biomes/jungle_edge.png", "jungle_edge");
     loadCriteria("assets/sprites/global/criteria/biomes/jungle_hills.png", "jungle_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/jungle.png", "jungle");
     loadCriteria("assets/sprites/global/criteria/biomes/lukewarm_ocean.png", "lukewarm_ocean");
     loadCriteria("assets/sprites/global/criteria/biomes/mountains.png", "mountains");
-    loadCriteria("assets/sprites/global/criteria/biomes/mushroom_field_shore.png", "mushroom_field_shore");
+    loadCriteria("assets/sprites/global/criteria/biomes/mushroom_field_shore.png",
+                 "mushroom_field_shore");
     loadCriteria("assets/sprites/global/criteria/biomes/mushroom_fields.png", "mushroom_fields");
     loadCriteria("assets/sprites/global/criteria/biomes/nether_wastes.png", "nether_wastes");
     loadCriteria("assets/sprites/global/criteria/biomes/ocean.png", "ocean");
@@ -106,7 +128,8 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/biomes/savanna.png", "savanna");
     loadCriteria("assets/sprites/global/criteria/biomes/snowy_beach.png", "snowy_beach");
     loadCriteria("assets/sprites/global/criteria/biomes/snowy_mountains.png", "snowy_mountains");
-    loadCriteria("assets/sprites/global/criteria/biomes/snowy_taiga_hills.png", "snowy_taiga_hills");
+    loadCriteria("assets/sprites/global/criteria/biomes/snowy_taiga_hills.png",
+                 "snowy_taiga_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/snowy_taiga.png", "snowy_taiga");
     loadCriteria("assets/sprites/global/criteria/biomes/snowy_tundra.png", "snowy_tundra");
     loadCriteria("assets/sprites/global/criteria/biomes/soul_sand_valley.png", "soul_sand_valley");
@@ -116,11 +139,12 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/biomes/taiga.png", "taiga");
     loadCriteria("assets/sprites/global/criteria/biomes/warm_ocean.png", "warm_ocean");
     loadCriteria("assets/sprites/global/criteria/biomes/warped_forest.png", "warped_forest");
-    loadCriteria("assets/sprites/global/criteria/biomes/wooded_badlands_plateau.png", "wooded_badlands_plateau");
+    loadCriteria("assets/sprites/global/criteria/biomes/wooded_badlands_plateau.png",
+                 "wooded_badlands_plateau");
     loadCriteria("assets/sprites/global/criteria/biomes/wooded_hills.png", "wooded_hills");
     loadCriteria("assets/sprites/global/criteria/biomes/wooded_mountains.png", "wooded_mountains");
     criteria["cats"] = {};
-    current_ = &criteria["cats"];
+    current_         = &criteria["cats"];
     loadCriteria("assets/sprites/global/criteria/cats/black.png", "black");
     loadCriteria("assets/sprites/global/criteria/cats/british_shorthair.png", "british_shorthair");
     loadCriteria("assets/sprites/global/criteria/cats/calico.png", "calico");
@@ -134,7 +158,7 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/cats/tuxedo.png", "tuxedo");
     loadCriteria("assets/sprites/global/criteria/cats/white.png", "white");
     criteria["food"] = {};
-    current_ = &criteria["food"];
+    current_         = &criteria["food"];
     loadCriteria("assets/sprites/global/criteria/food/apple.png", "apple");
     loadCriteria("assets/sprites/global/criteria/food/baked_potato.png", "baked_potato");
     loadCriteria("assets/sprites/global/criteria/food/beef.png", "beef");
@@ -153,8 +177,9 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/food/cooked_salmon.png", "cooked_salmon");
     loadCriteria("assets/sprites/global/criteria/food/cookie.png", "cookie");
     loadCriteria("assets/sprites/global/criteria/food/dried_kelp.png", "dried_kelp");
-    loadCriteria("assets/sprites/global/criteria/food/enchanted_golden_apple$825.png", "enchanted_golden_apple$825");
-    //loadCriteria("assets/sprites/global/criteria/food/glow_berries.png", "glow_berries");
+    loadCriteria("assets/sprites/global/criteria/food/enchanted_golden_apple$825.png",
+                 "enchanted_golden_apple$825");
+    // loadCriteria("assets/sprites/global/criteria/food/glow_berries.png", "glow_berries");
     loadCriteria("assets/sprites/global/criteria/food/golden_apple.png", "golden_apple");
     loadCriteria("assets/sprites/global/criteria/food/golden_carrot.png", "golden_carrot");
     loadCriteria("assets/sprites/global/criteria/food/honey_bottle.png", "honey_bottle");
@@ -176,7 +201,7 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/food/sweet_berries.png", "sweet_berries");
     loadCriteria("assets/sprites/global/criteria/food/tropical_fish.png", "tropical_fish");
     criteria["mobs"] = {};
-    current_ = &criteria["mobs"];
+    current_         = &criteria["mobs"];
     loadCriteria("assets/sprites/global/criteria/mobs/blaze.png", "blaze");
     loadCriteria("assets/sprites/global/criteria/mobs/cave_spider.png", "cave_spider");
     loadCriteria("assets/sprites/global/criteria/mobs/creeper.png", "creeper");
@@ -197,13 +222,13 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/mobs/pillager.png", "pillager");
     loadCriteria("assets/sprites/global/criteria/mobs/ravager.png", "ravager");
     loadCriteria("assets/sprites/global/criteria/mobs/shulker.png", "shulker");
-    //loadCriteria("assets/sprites/global/criteria/mobs/silverfish^16.png", "silverfish^16");
+    // loadCriteria("assets/sprites/global/criteria/mobs/silverfish^16.png", "silverfish^16");
     loadCriteria("assets/sprites/global/criteria/mobs/silverfish^48.png", "silverfish");
     loadCriteria("assets/sprites/global/criteria/mobs/skeleton.png", "skeleton");
     loadCriteria("assets/sprites/global/criteria/mobs/slime.png", "slime");
     loadCriteria("assets/sprites/global/criteria/mobs/spider.png", "spider");
     loadCriteria("assets/sprites/global/criteria/mobs/stray.png", "stray");
-    //loadCriteria("assets/sprites/global/criteria/mobs/vex_1.19.3.png", "vex_1");
+    // loadCriteria("assets/sprites/global/criteria/mobs/vex_1.19.3.png", "vex_1");
     loadCriteria("assets/sprites/global/criteria/mobs/vex.png", "vex");
     loadCriteria("assets/sprites/global/criteria/mobs/vindicator.png", "vindicator");
     loadCriteria("assets/sprites/global/criteria/mobs/witch.png", "witch");

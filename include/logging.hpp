@@ -12,10 +12,43 @@
 #include <iostream>
 #include <optional>
 
+// just for now, for safety reasons... lol
+namespace detail
+{
+string_map<std::unique_ptr<std::ofstream>>& get_files();
+}
+std::ofstream* get_file(std::string_view name);
+
+inline void set_default_file(std::string_view name)
+{
+    auto& files = detail::get_files();
+
+    // aatool.log -> ofstream*
+    // overlay.log -> ofstream*
+    // __default__ (default.log) -> ofstream*
+    // default.log -> nullptr
+
+    if (files.contains("__default__"))
+    {
+        for (auto& [k, v] : files)
+        {
+            if (v.get() == nullptr)
+            {
+                files.find("__default__")->second.swap(v);
+            }
+        }
+        files.erase("__default__");
+    }
+    files.emplace("__default__", nullptr);
+    std::ignore = get_file(name);
+
+    files.find(name)->second.swap(files.find("__default__")->second);
+}
+
 struct Logger
 {
     // Not super configurable, but it works for now.
-    mutable std::optional<std::ofstream> file;
+    mutable std::ostream* file{}; // WEAK ptr
     bool write_stdout{true};
 
     Logger(std::string name)
@@ -55,13 +88,13 @@ private:
     template <typename T>
     void write(T&& t) const
     {
-        if (file)
-        {
-            *file << t;
-        }
         if (write_stdout)
         {
             std::cout << t;
+        }
+        if (file)
+        {
+            *file << t;
         }
     }
 

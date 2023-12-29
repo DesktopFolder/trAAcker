@@ -35,4 +35,13 @@ namespace aa::conf {
 
         return {};
     }
+
+    template<typename T>
+    std::optional<T> get_if(const json& js, auto key) {
+        if (js.contains(key))
+        {
+            return js[key].template get<T>();
+        }
+        return {};
+    }
 }

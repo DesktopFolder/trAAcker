@@ -12,6 +12,7 @@ aa::WindowManager& aa::WindowManager::instance() {
 aa::WindowManager::WindowManager()
     : main_(sf::VideoMode(1280, 720), "AATool--"),
       overlay_(sf::VideoMode(800, 200), "AATool-- Overlay"),
+      logger(get_logger("WindowManager")),
       clearColours_{} {
     for (auto& col : clearColours_) {
         col = sf::Color(0, 0, 0);

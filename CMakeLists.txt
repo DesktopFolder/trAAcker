@@ -91,6 +91,7 @@ add_executable(
     include/dmon.cpp include/dmon.hpp
     include/logging.cpp include/logging.hpp
     # Source things? Hmmm
+    src/Advancements.cpp src/Advancements.hpp
     src/Overlay.cpp src/Overlay.hpp
     src/WindowManager.cpp src/WindowManager.hpp
     src/ResourceManager.cpp src/ResourceManager.hpp
