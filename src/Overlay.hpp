@@ -38,6 +38,11 @@ struct OverlayManager
 
     OverlayManager();
 
+    // assumes manifest is in advancements.json atm
+    void reset_from_file(std::string_view filename);
+
+    void reset_from_status(const AdvancementStatus& status);
+
     void reset();
 
     void setRate(uint8_t rate)

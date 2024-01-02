@@ -15,7 +15,7 @@ void asset_helper(auto& dir_entry, auto& assets)
     if (!dir_entry.is_regular_file()) return;
     const auto p = dir_entry.path();
     const auto s = p.string();
-    if (not s.ends_with(".png") and not s.ends_with(".gif")) return;
+    if (not (s.ends_with(".png") or s.ends_with(".gif"))) return;
     if (assets.contains(aa::ResourceManager::assetName(s)))
     {
         // we have this asset loaded already
@@ -52,6 +52,10 @@ void aa::ResourceManager::loadCriteria(std::string path, std::string name)
     text.loadFromFile(path);
     current_->emplace(name, text);
     test_criteria.emplace(name, text);
+
+    auto t = std::make_unique<sf::Texture>();
+    t->loadFromFile(path);
+    criteria_map.emplace(name, std::move(t));
 }
 
 void aa::ResourceManager::loadAllCriteria()
@@ -145,18 +149,19 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/biomes/wooded_mountains.png", "wooded_mountains");
     criteria["cats"] = {};
     current_         = &criteria["cats"];
-    loadCriteria("assets/sprites/global/criteria/cats/black.png", "black");
-    loadCriteria("assets/sprites/global/criteria/cats/british_shorthair.png", "british_shorthair");
-    loadCriteria("assets/sprites/global/criteria/cats/calico.png", "calico");
-    loadCriteria("assets/sprites/global/criteria/cats/jellie.png", "jellie");
-    loadCriteria("assets/sprites/global/criteria/cats/ocelot.png", "ocelot");
-    loadCriteria("assets/sprites/global/criteria/cats/persian.png", "persian");
-    loadCriteria("assets/sprites/global/criteria/cats/ragdoll.png", "ragdoll");
-    loadCriteria("assets/sprites/global/criteria/cats/red.png", "red");
-    loadCriteria("assets/sprites/global/criteria/cats/siamese.png", "siamese");
-    loadCriteria("assets/sprites/global/criteria/cats/tabby.png", "tabby");
-    loadCriteria("assets/sprites/global/criteria/cats/tuxedo.png", "tuxedo");
-    loadCriteria("assets/sprites/global/criteria/cats/white.png", "white");
+    // Why Minecraft. Why.
+    loadCriteria("assets/sprites/global/criteria/cats/black.png", "textures/entity/cat/all_black.png");
+    loadCriteria("assets/sprites/global/criteria/cats/british_shorthair.png", "textures/entity/cat/british_shorthair.png");
+    loadCriteria("assets/sprites/global/criteria/cats/calico.png", "textures/entity/cat/calico.png");
+    loadCriteria("assets/sprites/global/criteria/cats/jellie.png", "textures/entity/cat/jellie.png");
+    // loadCriteria("assets/sprites/global/criteria/cats/ocelot.png", "textures/entity/cat/ocelot.png");
+    loadCriteria("assets/sprites/global/criteria/cats/persian.png", "textures/entity/cat/persian.png");
+    loadCriteria("assets/sprites/global/criteria/cats/ragdoll.png", "textures/entity/cat/ragdoll.png");
+    loadCriteria("assets/sprites/global/criteria/cats/red.png", "textures/entity/cat/red.png");
+    loadCriteria("assets/sprites/global/criteria/cats/siamese.png", "textures/entity/cat/siamese.png");
+    loadCriteria("assets/sprites/global/criteria/cats/tabby.png", "textures/entity/cat/tabby.png");
+    loadCriteria("assets/sprites/global/criteria/cats/tuxedo.png", "textures/entity/cat/black.png");
+    loadCriteria("assets/sprites/global/criteria/cats/white.png", "textures/entity/cat/white.png");
     criteria["food"] = {};
     current_         = &criteria["food"];
     loadCriteria("assets/sprites/global/criteria/food/apple.png", "apple");
@@ -178,7 +183,7 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/food/cookie.png", "cookie");
     loadCriteria("assets/sprites/global/criteria/food/dried_kelp.png", "dried_kelp");
     loadCriteria("assets/sprites/global/criteria/food/enchanted_golden_apple$825.png",
-                 "enchanted_golden_apple$825");
+                 "enchanted_golden_apple");
     // loadCriteria("assets/sprites/global/criteria/food/glow_berries.png", "glow_berries");
     loadCriteria("assets/sprites/global/criteria/food/golden_apple.png", "golden_apple");
     loadCriteria("assets/sprites/global/criteria/food/golden_carrot.png", "golden_carrot");

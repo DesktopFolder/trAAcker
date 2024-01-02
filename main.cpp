@@ -5,6 +5,7 @@
 #include <thread>
 
 #include "logging.hpp"
+
 #include "src/ConfigProvider.hpp"
 #include "src/FileProvider.hpp"
 #include "src/Overlay.hpp"
@@ -71,8 +72,22 @@ int main()
                 else if (event.key.code == sf::Keyboard::B)
                 {
                     log::debug("Parsing test advancements file (1) - testing/all-everything.json");
-                    auto advancements = get_advancements("testing/all-everything.json");
-                    ov.update_with(advancements);
+                    ov.reset_from_file("testing/all-everything.json");
+                }
+                else if (event.key.code == sf::Keyboard::C)
+                {
+                    log::debug("Parsing test advancements file (2) - testing/no-recipes.json");
+                    ov.reset_from_file("testing/no-recipes.json");
+                }
+                else if (event.key.code == sf::Keyboard::D)
+                {
+                    log::debug("Parsing test advancements file (2) - testing/less.json");
+                    ov.reset_from_file("testing/less.json");
+                }
+                else if (event.key.code == sf::Keyboard::R)
+                {
+                    log::debug("Parsing test advancements file (2) - testing/less.json");
+                    ov.reset();
                 }
             }
         }

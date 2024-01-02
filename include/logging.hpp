@@ -10,6 +10,7 @@
 #include "utilities.hpp"
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <optional>
 
 // just for now, for safety reasons... lol
@@ -82,6 +83,25 @@ struct Logger
     void error(Ts&&... ts) const
     {
         write_endl(str_error_, std::forward<Ts>(ts)...);
+    }
+
+    template <typename... Ts>
+    void fatal_error(Ts&&... ts)
+    {
+        std::ostringstream ss;
+
+        auto b = write_stdout;
+        auto* f = file;
+
+        write_stdout = false;
+        file = &ss;
+        error(std::forward<Ts>(ts)...);
+
+        write_stdout = b;
+        file = f;
+        error(std::forward<Ts>(ts)...);
+
+        throw std::runtime_error(ss.str());
     }
 
 private:
