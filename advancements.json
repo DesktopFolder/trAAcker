@@ -735,57 +735,57 @@
           "@goal": "Cats",
           "criterion": [
             {
-              "@id": "textures/entity/cat/jellie",
+              "@id": "textures/entity/cat/jellie.png",
               "@name": "Jellie",
               "@icon": "jellie"
             },
             {
-              "@id": "textures/entity/cat/calico",
+              "@id": "textures/entity/cat/calico.png",
               "@name": "Calico",
               "@icon": "calico"
             },
             {
-              "@id": "textures/entity/cat/red",
+              "@id": "textures/entity/cat/red.png",
               "@name": "Red",
               "@icon": "red"
             },
             {
-              "@id": "textures/entity/cat/black",
+              "@id": "textures/entity/cat/black.png",
               "@name": "Tuxedo",
               "@icon": "tuxedo"
             },
             {
-              "@id": "textures/entity/cat/white",
+              "@id": "textures/entity/cat/white.png",
               "@name": "White",
               "@icon": "white"
             },
             {
-              "@id": "textures/entity/cat/ragdoll",
+              "@id": "textures/entity/cat/ragdoll.png",
               "@name": "Ragdoll",
               "@icon": "ragdoll"
             },
             {
-              "@id": "textures/entity/cat/british_shorthair",
+              "@id": "textures/entity/cat/british_shorthair.png",
               "@name": "British",
               "@icon": "british_shorthair"
             },
             {
-              "@id": "textures/entity/cat/tabby",
+              "@id": "textures/entity/cat/tabby.png",
               "@name": "Tabby",
               "@icon": "tabby"
             },
             {
-              "@id": "textures/entity/cat/all_black",
+              "@id": "textures/entity/cat/all_black.png",
               "@name": "Black",
               "@icon": "black"
             },
             {
-              "@id": "textures/entity/cat/persian",
+              "@id": "textures/entity/cat/persian.png",
               "@name": "Persian",
               "@icon": "persian"
             },
             {
-              "@id": "textures/entity/cat/siamese",
+              "@id": "textures/entity/cat/siamese.png",
               "@name": "Siamese",
               "@icon": "siamese"
             }
