@@ -95,3 +95,9 @@ void aa::OverlayManager::reset()
 
     reset_from_status(status);
 }
+
+void aa::OverlayManager::debug() { auto& logger = get_logger("OverlayManager::debug");
+
+    logger.debug("Major requirements buffer size: ", reqs.rb_.buf().size());
+    logger.debug("Pre-requirements buffer size: ", prereqs.rb_.buf().size());
+}

@@ -45,6 +45,8 @@ struct OverlayManager
 
     void reset();
 
+    void debug();
+
     void setRate(uint8_t rate)
     {
         prereqs.rate_ = rate;

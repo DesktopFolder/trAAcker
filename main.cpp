@@ -89,6 +89,10 @@ int main()
                     log::debug("Parsing test advancements file (2) - testing/less.json");
                     ov.reset();
                 }
+                else if (event.key.code == sf::Keyboard::P)
+                {
+                    ov.debug();
+                }
             }
         }
         wm.clearAll();

@@ -256,8 +256,13 @@ AdvancementStatus AdvancementStatus::from_file(std::string_view filename,
 
                 if (not adv.criteria.contains(crit_key))
                 {
-                    logger.fatal_error("Criteria key ", crit_key,
-                                       " is not present in advancement ", name);
+                    // This is fine actually. We will get random
+                    // criteria from parsing that aren't 'real'
+                    // criteria. If they're not in manifest,
+                    // just ignore them. Not real! Fake! !!!!!
+                    // logger.fatal_error("Criteria key ", crit_key,
+                    //                   " is not present in advancement ", name);
+                    continue;
                 }
                 adv.criteria.erase(crit_key);
             }
