@@ -47,12 +47,7 @@ int main()
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(true);
 
-    aa::OverlayManager ov(manifest);
-    // should really be overlay.rate but whatever
-    if (conf.contains("rate"))
-    {
-        ov.setRate(static_cast<uint8_t>(conf["rate"].template get<int>()));
-    }
+    aa::OverlayManager ov(manifest, conf["overlay"]);
 
     aa::CurrentFileProvider fp;
     auto& rm = aa::ResourceManager::instance();

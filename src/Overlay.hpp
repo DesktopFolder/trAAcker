@@ -8,6 +8,8 @@
 #include "Advancements.hpp"
 #include "utilities.hpp"
 
+#include <nlohmann/json_fwd.hpp>
+
 #include <vector>
 
 namespace aa
@@ -36,7 +38,7 @@ struct OverlayManager
     std::vector<Advancement> advancements;
     std::vector<Criteria> criteria;
 
-    OverlayManager(const AdvancementManifest& manifest);
+    OverlayManager(const AdvancementManifest& manifest, const nlohmann::json& config);
 
     // assumes manifest is in advancements.json atm
     void reset_from_file(std::string_view filename, const AdvancementManifest& manifest);

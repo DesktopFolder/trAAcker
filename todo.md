@@ -1,7 +1,6 @@
 # Current Design Notes (Redesign / Refactor / Foundation Development)
 
 Primary todolist:
-- Ordering for sprite??? and advancements?
 - Configurable sprite sizes in overlay
 - Background + names for main advancements in overlay
 - Basic layout in main window

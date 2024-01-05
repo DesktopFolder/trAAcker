@@ -1,4 +1,10 @@
 {
+    "overlay": {
+        "criteria-y": 10,
+        "criteria-size": 24,
+        "criteria-padding": 1,
+        "frame": "none"
+    },
     "window": {
         "close-on": "any",
         "main": {
