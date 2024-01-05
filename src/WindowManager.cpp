@@ -22,6 +22,11 @@ aa::WindowManager::WindowManager()
     auto conf = aa::conf::getNS("window");
     if (conf.empty()) return;
 
+    if (aa::conf::get_or(conf, "close-on", std::string{}) == "any")
+    {
+        close_mode = CloseMode::Any;
+    }
+
     for (auto wid : WINDOWS) {
         auto wstr = wid_to_string(wid);
         if (conf.contains(wstr)) {
@@ -29,7 +34,7 @@ aa::WindowManager::WindowManager()
             if (wconf.contains("bg")) {
                 // Wow, we can set a config value
                 auto cl = wconf["bg"].template get<std::array<uint8_t, 3>>();
-                auto& col = clearColours_[wid];
+                auto& col = clearColours_[static_cast<uint32_t>(wid)];
                 col.r = cl[0];
                 col.g = cl[1];
                 col.b = cl[2];

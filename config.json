@@ -1,5 +1,6 @@
 {
     "window": {
+        "close-on": "any",
         "main": {
             "bg": [8,40,170]
         },

@@ -28,7 +28,7 @@ auto unprefixed_id(auto& j)
     return unprefixed(j["@id"].template get<std::string>());
 }
 
-template<typename T>
+template <typename T>
 auto after_last(auto delim, T iterable)
 {
     // now we have a normalized id, something like: end/root or hello/world
@@ -117,7 +117,8 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
              *       },
              */
             const auto id = manifest::parse_advancement_id(a);
-            logger.debug("Got ID: ", id.full_id, " (category: ", id.category, ", name: ", id.icon, ")");
+            logger.debug("Got ID: ", id.full_id, " (category: ", id.category, ", name: ", id.icon,
+                         ")");
             // "minecraft:adventure/two_birds_one_arrow"
             // -> ["adventure/two_birds_one_arrow", "two_birds_one_arrow"]
             auto [itr, success] =
@@ -201,9 +202,22 @@ AdvancementStatus AdvancementStatus::from_file(std::string_view filename,
     std::ifstream f(filename);
     if (!f.good())
     {
-        logger.fatal_error("Could not open file: ", filename);
+        logger.error("Could not open file: ", filename);
+        ret.meta.valid = false;
+        return ret;
     }
-    const auto advancements = json::parse(f);
+
+    auto advancements = json{};
+    try
+    {
+        advancements = json::parse(f);
+    }
+    catch (std::exception& e)
+    {
+        logger.error("Failed to parse JSON: ", e.what());
+        ret.meta.valid = false;
+        return ret;
+    }
 
     // Copy :sob:
     // Kind of have to do this. Because we are 'removing' things,
@@ -220,7 +234,9 @@ AdvancementStatus AdvancementStatus::from_file(std::string_view filename,
         auto name = key.substr(adv_prefix.size());
         if (not ret.incomplete.contains(name))
         {
-            logger.fatal_error("We don't have the advancement: ", name);
+            logger.error("We don't have the advancement: ", name);
+            ret.meta.valid = false;
+            return ret;
         }
 
         const auto is_completed = value.contains("done") && value["done"].template get<bool>();

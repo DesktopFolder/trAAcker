@@ -21,10 +21,16 @@
 namespace aa
 {
 
-enum WindowID
+enum class WindowID
 {
     Main,
     Overlay,
+};
+
+enum class CloseMode
+{
+    Any,
+    Main,
 };
 
 static constexpr uint8_t WINDOW_NUMER = 2;
@@ -46,6 +52,7 @@ class WindowManager
 
     sf::RenderWindow main_;
     sf::RenderWindow overlay_;
+    CloseMode close_mode{CloseMode::Main};
 
     Logger& logger;
 
@@ -99,7 +106,7 @@ public:
         for (auto wid : windows_)
         {
             auto& window = getWindow(wid);
-            window.clear(clearColours_[wid]);
+            window.clear(clearColours_[static_cast<uint32_t>(wid)]);
         }
     }
 
@@ -112,7 +119,14 @@ public:
         }
     }
 
-    bool is_shutdown() const { return not main_.isOpen(); }
+    bool is_shutdown() const { 
+        switch (close_mode) {
+            case CloseMode::Main:
+                return not main_.isOpen();
+            case CloseMode::Any:
+                return not main_.isOpen() or not overlay_.isOpen();
+        }
+    }
     auto& getMain() { return main_; }
     auto& getOverlay() { return overlay_; }
     sf::RenderWindow& getWindow(WindowID id)

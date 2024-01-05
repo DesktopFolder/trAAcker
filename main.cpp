@@ -104,6 +104,7 @@ int main()
                     log::debug("Dumping all available debug information.");
                     ov.debug();
                     log::debug("Ticks processed: ", ticks);
+                    fp.debug();
                     log::debug("Finished dumping debug information.");
                 }
             }
@@ -111,7 +112,11 @@ int main()
         wm.clearAll();
 
         // poll after handling events...
-        fp.poll();
+        if (const auto result = fp.poll(); result.has_value())
+        {
+            log::debug("Attempting to reset from found updated file: ", result.value());
+            ov.reset_from_file(result.value(), manifest);
+        }
 
         if (ticks % 60 == 0)
         {

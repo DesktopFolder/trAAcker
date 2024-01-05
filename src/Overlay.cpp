@@ -6,41 +6,6 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-std::string getStrOr(auto& j, const std::string& key, const std::string& def)
-{
-    if (j.contains(key)) return j[key].template get<std::string>();
-    return def;
-}
-
-auto parseID(auto& j)
-{
-    struct ParseResult
-    {
-        std::string full_id;
-        std::string icon_id;
-    };
-    std::string id                   = j["@id"].template get<std::string>();
-    const std::string_view mc_prefix = "minecraft:";
-    if (id.starts_with(mc_prefix))
-    {
-        id = id.substr(mc_prefix.size());
-    }
-
-    // now we have a normalized id, something like: end/root or hello/world
-    auto it = std::find(id.crbegin(), id.crend(), '/');
-    // this shouldn't happen, but in case it does, handle it normally
-    if (it == id.crend()) return ParseResult{id, id};
-    // otherwise, return full id AND icon id
-    return ParseResult{id, std::string{it.base(), id.cend()}};
-}
-
-std::string parseIcon(auto& j)
-{
-    if (j.contains("@icon")) return j["@icon"].template get<std::string>();
-    // return parseID(j);
-    return "";
-}
-
 // Current opinion on this code - not very good
 // Seems ridiculously stateful and over the top for performance when it's not really...
 // like it'd be better to just store whether each advancement is on or off I think.
@@ -58,6 +23,12 @@ aa::OverlayManager::OverlayManager(const AdvancementManifest& manifest)
 
 void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)
 {
+    if (!status.meta.valid)
+    {
+        get_logger("OverlayManager").warning("Failed to reset from status - parse/load error.");
+        return;
+    }
+
     reqs.rb_.buf().clear();
     prereqs.rb_.buf().clear();
 
@@ -81,6 +52,7 @@ void aa::OverlayManager::reset_from_file(std::string_view filename,
     get_logger("OverlayManager")
         .debug("Resetting from advancements.json manifest given file ", filename);
 
+    // This can handle errors, we assume that sometimes we get a bad file.
     reset_from_status(status);
 }
 

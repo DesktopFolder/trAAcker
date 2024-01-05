@@ -32,7 +32,7 @@ struct WatchData
     {
         const auto& logger = get_logger("dmon");
         logger.debug("Watching '", file_watched, "', found ", file_path);
-        if (file_watched.empty() || file_path == file_watched)
+        if ((file_watched.empty() || file_path == file_watched) && not file_path.ends_with("~"))
         {
             logger.debug("Storing the fact that we found changes.");
             std::lock_guard l(change_guard);
@@ -67,21 +67,28 @@ struct Watch
 
     Watch() = default;
 
+    void debug();
+
     bool is_active() { return id_.has_value(); }
     bool has_changes()
     {
         if (data_) return data_->has_modifications.load();
+        log::error("No valid data_ pointer found during has_changes.");
         return false;
     }
 
     std::optional<std::string> get_change()
     {
-        if (!data_) return std::nullopt;
+        if (!data_)
+        {
+            log::error("No valid data_ pointer found during has_changes.");
+            return std::nullopt;
+        }
         if (data_->has_modifications.load())
         {
             std::lock_guard l(data_->change_guard);
             data_->has_modifications.store(false);
-            return data_->change;
+            return dir_ + data_->change;
         }
         return std::nullopt;
     }
@@ -93,6 +100,9 @@ struct Watch
 private:
     Watch(std::string dirname, std::string filename = "");
 
+    // Always valid. But we need the object to be movable
+    // separately from the data (as we pass it into callbacks)
+    // so we store it here as a unique pointer.
     std::unique_ptr<impl::WatchData> data_;
 
     std::optional<watch_id> id_;

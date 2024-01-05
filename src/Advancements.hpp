@@ -59,7 +59,8 @@ struct AdvancementStatus
 
     // Metainformation that we gather as we parse. All custom, because we don't want
     // to store and search through absolutely everything.
-    struct meta {
+    struct {
         bool has_egap = false;
-    };
+        bool valid = true;
+    } meta{};
 };

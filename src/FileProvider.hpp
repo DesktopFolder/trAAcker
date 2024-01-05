@@ -2,6 +2,8 @@
 
 #include "dmon.hpp"
 
+struct Logger;
+
 namespace aa
 {
 struct CurrentFileProvider
@@ -14,5 +16,10 @@ struct CurrentFileProvider
     dmon::Watch watcher;
 
     std::optional<std::string> poll();
+
+    void debug();
+
+private:
+    Logger* logger;
 };
 }  // namespace aa
