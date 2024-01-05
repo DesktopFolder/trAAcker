@@ -144,12 +144,19 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
                 {
                     // Try to load the criteria. The right way.
                     const auto crit = manifest::unprefixed_id(c);
-                    if (not rm.criteria_map.contains(crit))
+                    const std::string icon =
+                        c.contains("@icon") ? c["@icon"].template get<std::string>() : crit;
+                    if (not rm.criteria_map.contains(icon))
                     {
-                        logger.fatal_error("Could not find criteria texture for: ", crit,
-                                           " (In advancement: ", adv.full_id(), ")");
+                        if (not rm.criteria_map.contains(crit))
+                        {
+                            logger.fatal_error("Could not find criteria texture for: ", icon,
+                                               " (In advancement: ", adv.full_id(), ")");
+                        }
+                        adv.criteria.emplace(crit, rm.criteria_map[crit].get());
+                        continue;
                     }
-                    adv.criteria.emplace(crit, rm.criteria_map[crit].get());
+                    adv.criteria.emplace(crit, rm.criteria_map[icon].get());
                 }
             }
 
