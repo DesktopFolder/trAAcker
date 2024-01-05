@@ -1,5 +1,11 @@
 # Current Design Notes (Redesign / Refactor / Foundation Development)
 
+Primary todolist:
+- Configurable sprite sizes in overlay
+- Background + names for main advancements in overlay
+- Basic layout in main window
+- Get only advancement file from advancements folder for instance
+
 - "Advancement Status" rich object fed into display adaptors
 - What is an advancement?
     - Key: category/shortname (FQN)

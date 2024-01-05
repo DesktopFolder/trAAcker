@@ -21,8 +21,8 @@ struct TurnTable
 
         sf::Sprite sprite16;
         sf::Sprite sprite32;
-        sf::Sprite sprite512;
         sf::Sprite sprite48;
+        sf::Sprite sprite512;
         sprite16.setScale(3, 3);
         sprite32.setScale(1.5, 1.5);
         sprite512.setScale(0.09375, 0.09375);

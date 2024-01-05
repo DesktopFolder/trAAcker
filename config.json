@@ -7,9 +7,10 @@
             "bg": [4,250,0]
         }
     },
-    "rate": 2,
+    "rate": 3,
     "instance": {
         "saves": "testing/"
     },
-    "log": "aatool.log"
+    "log": "aatool.log",
+    "verbose": true
 }

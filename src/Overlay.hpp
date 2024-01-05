@@ -36,14 +36,14 @@ struct OverlayManager
     std::vector<Advancement> advancements;
     std::vector<Criteria> criteria;
 
-    OverlayManager();
+    OverlayManager(const AdvancementManifest& manifest);
 
     // assumes manifest is in advancements.json atm
-    void reset_from_file(std::string_view filename);
+    void reset_from_file(std::string_view filename, const AdvancementManifest& manifest);
 
     void reset_from_status(const AdvancementStatus& status);
 
-    void reset();
+    void reset(const AdvancementManifest& manifest);
 
     void debug();
 

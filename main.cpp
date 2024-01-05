@@ -12,14 +12,16 @@
 #include "src/ResourceManager.hpp"
 #include "src/WindowManager.hpp"
 
-#include "src/TurnTable.hpp"
 #include "src/Advancements.hpp"
+#include "src/TurnTable.hpp"
 
 int main()
 {
     // Leave this at the start of main to ensure correct shutdown order.
     // Um... sort of dumb, but I believe in 'dumb but works until I fix it'
     // as opposed to 'leaving a gun on the table with the safety off'.
+    // This is for logging - we preload the list of files object.
+    // That way we close files at the very end.
     const auto& _ = detail::get_files();
 
     auto& conf = aa::conf::get();
@@ -28,38 +30,41 @@ int main()
         set_default_file(logfile.value());
     }
 
+    Logger::stdout_default = aa::conf::get_or(conf, "verbose", false);
+
+    // Todo: It would be really cool if we could do lazy/background loading
+    // of assets here. Just launch off a std::thread and do window setup
+    // simultaneously. Because this is just 'cool' I'm going to relegate
+    // it for when I eventually (???) fix this up to be a proper application
+    // and not just me throwing features into the main source file, lol.
+    const auto manifest_source =
+        aa::conf::get_or<std::string>(conf, "manifest", "advancements.json");
+    auto manifest = AdvancementManifest::from_file(manifest_source);
+    log::debug("Loaded manifest from ", manifest_source);
+
+    // Doesn't do anything, we're just creating bindings.
     auto& window     = aa::WindowManager::instance().getOverlay();
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(true);
-    // sf::View view;
 
-    // aa::RingBuffer<aa::Tile> rb;
-    //  aa::TurnTable tb;
-    // tb.rb_.buf().emplace_back("conduit", text);
-
-    aa::OverlayManager ov;
+    aa::OverlayManager ov(manifest);
     // should really be overlay.rate but whatever
     if (conf.contains("rate"))
     {
         ov.setRate(static_cast<uint8_t>(conf["rate"].template get<int>()));
     }
 
-    // Initialize the view to a rectangle located at (100, 100) and with a size of 400x200
-    // view.reset(sf::FloatRect(0, 0, 400, 400));
-
-    // where we render on the destination.
-    // view.setViewport(sf::FloatRect(0.f, 0.f, 0.5f, 1.f));
-
-    uint64_t ticks = 0;
-
     aa::CurrentFileProvider fp;
     auto& rm = aa::ResourceManager::instance();
     auto& wm = aa::WindowManager::instance();
 
+    uint64_t ticks = 0;
     log::debug("Starting main window loop.");
     while (!wm.is_shutdown())
     {
         // Handle events. We may need to add more stuff in here later.
+        // Keep all this jammed in here until making an Application class later.
+        // Or until making this all data driven/scripted? Not sure, really.
         auto events = wm.handleEvents();
         for (auto& event : events)
         {
@@ -72,26 +77,34 @@ int main()
                 else if (event.key.code == sf::Keyboard::B)
                 {
                     log::debug("Parsing test advancements file (1) - testing/all-everything.json");
-                    ov.reset_from_file("testing/all-everything.json");
+                    ov.reset_from_file("testing/all-everything.json", manifest);
                 }
                 else if (event.key.code == sf::Keyboard::C)
                 {
                     log::debug("Parsing test advancements file (2) - testing/no-recipes.json");
-                    ov.reset_from_file("testing/no-recipes.json");
+                    ov.reset_from_file("testing/no-recipes.json", manifest);
                 }
                 else if (event.key.code == sf::Keyboard::D)
                 {
-                    log::debug("Parsing test advancements file (2) - testing/less.json");
-                    ov.reset_from_file("testing/less.json");
+                    log::debug("Parsing test advancements file (3) - testing/less.json");
+                    ov.reset_from_file("testing/less.json", manifest);
+                }
+                else if (event.key.code == sf::Keyboard::E)
+                {
+                    log::debug("Parsing test advancements file (4) - testing/most-complete.json");
+                    ov.reset_from_file("testing/most-complete.json", manifest);
                 }
                 else if (event.key.code == sf::Keyboard::R)
                 {
-                    log::debug("Parsing test advancements file (2) - testing/less.json");
-                    ov.reset();
+                    log::debug("Resetting to all advancements required.");
+                    ov.reset(manifest);
                 }
                 else if (event.key.code == sf::Keyboard::P)
                 {
+                    log::debug("Dumping all available debug information.");
                     ov.debug();
+                    log::debug("Ticks processed: ", ticks);
+                    log::debug("Finished dumping debug information.");
                 }
             }
         }

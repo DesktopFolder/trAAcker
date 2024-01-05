@@ -44,4 +44,13 @@ namespace aa::conf {
         }
         return {};
     }
+
+    template<typename T>
+    auto get_or(const json& js, auto key, T default_value) -> T {
+        if (js.contains(key))
+        {
+            return js[key].template get<T>();
+        }
+        return default_value;
+    }
 }

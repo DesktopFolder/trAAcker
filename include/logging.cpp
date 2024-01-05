@@ -1,5 +1,7 @@
 #include "logging.hpp"
 
+bool Logger::stdout_default = false;
+
 string_map<std::unique_ptr<std::ofstream>>& detail::get_files()
 {
     static string_map<std::unique_ptr<std::ofstream>> files;

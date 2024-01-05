@@ -50,12 +50,15 @@ struct Logger
 {
     // Not super configurable, but it works for now.
     mutable std::ostream* file{}; // WEAK ptr
-    bool write_stdout{true};
+    bool write_stdout;
+
+    static bool stdout_default;
 
     Logger(std::string name)
         : name_(std::move(name)), str_debug_("DEBUG (" + name_ + "): "),
           str_warning_("WARNING (" + name_ + "): "), str_error_("ERROR (" + name_ + "): "),
-          str_info_("INFO (" + name_ + "): ")
+          str_info_("INFO (" + name_ + "): "),
+          write_stdout(stdout_default)
     {
     }
 
