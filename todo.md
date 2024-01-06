@@ -12,7 +12,13 @@ Primary todolist:
     - Basic data: Icon (texture ptr?) / Short Name (str) / Category (str)
     - Criterion data: Missing / Completed? Icons optional?
 
-# Todo for AASSG
+# Core / Refactor ToDo
+
+- ResourceManager refactor!
+    - Store textures at different resolutions, with a standardized search/lookup method.
+    - Normalize all the different texture loading solutions.
+
+# Initial Todo List (mostly old... I guess)
 
 1. Basic animation on turntables
     - Render background sprites
