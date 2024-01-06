@@ -260,8 +260,7 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/food/cooked_salmon.png", "cooked_salmon");
     loadCriteria("assets/sprites/global/criteria/food/cookie.png", "cookie");
     loadCriteria("assets/sprites/global/criteria/food/dried_kelp.png", "dried_kelp");
-    loadCriteria("assets/sprites/global/criteria/food/enchanted_golden_apple$825.png",
-                 "enchanted_golden_apple");
+    loadCriteria("assets/inject/enchanted_golden_apple.png", "enchanted_golden_apple");
     // loadCriteria("assets/sprites/global/criteria/food/glow_berries.png", "glow_berries");
     loadCriteria("assets/sprites/global/criteria/food/golden_apple.png", "golden_apple");
     loadCriteria("assets/sprites/global/criteria/food/golden_carrot.png", "golden_carrot");
