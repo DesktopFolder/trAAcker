@@ -7,8 +7,7 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
-aa::OverlayManager::OverlayManager(const AdvancementManifest& manifest,
-                                   const nlohmann::json& config)
+aa::OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config)
 {
     // Configure the overlay.
     using aa::conf::apply;
@@ -35,12 +34,37 @@ aa::OverlayManager::OverlayManager(const AdvancementManifest& manifest,
         .debug("Created OverlayManager. Current configuration:")
         .debug("Criteria Size: ", prereqs.get_size())
         .debug("Criteria Y: ", prereqs.yOffset_)
-        .debug("Advancements Y: ", reqs.yOffset_);
+        .debug("Advancements Y: ", reqs.yOffset_)
+        .debug("Now remapping textures as appropriate.");
+
+    remap_textures(manifest);
 
     // Okay, now to test out the new advancements setup.
     auto status = AdvancementStatus::from_default(manifest);
 
     reset_from_status(status);
+}
+
+void aa::OverlayManager::remap_textures(AdvancementManifest& manifest)
+{
+    auto& rm = aa::ResourceManager::instance();
+    // This works for now :)
+
+    const auto crit_sz = prereqs.get_texture_size();
+    const auto adv_sz  = reqs.get_texture_size();
+    get_logger("OverlayManager")
+        .debug("Remapping all textures.")
+        .debug("Remapping criteria to size: ", crit_sz)
+        .debug("Remapping advancements to size: ", adv_sz);
+
+    for (auto& [_, advancement] : manifest.advancements)
+    {
+        advancement.icon = rm.remap_texture(advancement.icon, adv_sz);
+        for (auto& itr : advancement.criteria)
+        {
+            itr.second = rm.remap_texture(itr.second, crit_sz);
+        }
+    }
 }
 
 void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)

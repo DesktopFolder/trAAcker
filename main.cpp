@@ -29,6 +29,8 @@ int main()
     {
         set_default_file(logfile.value());
     }
+    const uint64_t sleep_ms = aa::conf::get_or(conf, "loop-sleep", 1);
+    const bool vsync = aa::conf::get_or(conf, "vsync", false);
 
     Logger::stdout_default = aa::conf::get_or(conf, "verbose", false);
 
@@ -45,7 +47,7 @@ int main()
     // Doesn't do anything, we're just creating bindings.
     auto& window     = aa::WindowManager::instance().getOverlay();
     auto& mainwindow = aa::WindowManager::instance().getMain();
-    window.setVerticalSyncEnabled(true);
+    window.setVerticalSyncEnabled(vsync);
 
     aa::OverlayManager ov(manifest, conf["overlay"]);
 
@@ -132,7 +134,7 @@ int main()
         wm.displayAll();
 
         // Give control to the OS - we don't want to consume too many resources.
-        std::this_thread::sleep_for(std::chrono::seconds(0));
+        std::this_thread::sleep_for(std::chrono::milliseconds(sleep_ms));
         ticks += 1; // it's the completed # of ticks
     }
     if (mainwindow.isOpen())

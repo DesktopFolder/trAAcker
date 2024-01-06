@@ -25,9 +25,9 @@ struct Advancement
     }
 
     // Just do this for now. Deal with names later.
-    string_map<sf::Texture*> criteria;
+    string_map<const sf::Texture*> criteria;
 
-    sf::Texture* icon;
+    const sf::Texture* icon;
 };
 
 /* AdvancementManifest

@@ -38,7 +38,7 @@ struct OverlayManager
     std::vector<Advancement> advancements;
     std::vector<Criteria> criteria;
 
-    OverlayManager(const AdvancementManifest& manifest, const nlohmann::json& config);
+    OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config);
 
     // assumes manifest is in advancements.json atm
     void reset_from_file(std::string_view filename, const AdvancementManifest& manifest);
@@ -61,6 +61,6 @@ struct OverlayManager
         reqs.animateDraw(win);
     }
 
-    void update_with(string_map<::Advancement>& advs);
+    void remap_textures(AdvancementManifest& manifest);
 };
 }  // namespace aa

@@ -3,6 +3,7 @@
 #include "logging.hpp"
 
 #include <filesystem>
+#include <SFML/Graphics.hpp>
 
 aa::ResourceManager& aa::ResourceManager::instance()
 {
@@ -15,7 +16,7 @@ void asset_helper(auto& dir_entry, auto& assets)
     if (!dir_entry.is_regular_file()) return;
     const auto p = dir_entry.path();
     const auto s = p.string();
-    if (not (s.ends_with(".png") or s.ends_with(".gif"))) return;
+    if (not(s.ends_with(".png") or s.ends_with(".gif"))) return;
     if (assets.contains(aa::ResourceManager::assetName(s)))
     {
         // we have this asset loaded already
@@ -44,6 +45,40 @@ std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()
 
     return assets;
 }
+
+const sf::Texture* aa::ResourceManager::remap_texture(const sf::Texture* base, uint64_t new_size)
+{
+    const auto [x, y] = base->getSize();
+    if (x == new_size)
+    {
+        // No need to remap here.
+        return base;
+    }
+    sf::Sprite s;
+    // Say, 32x32
+    float initial = static_cast<float>(x);
+    // Say, 48x48
+    float desired = static_cast<float>(new_size);
+    // Say, 48 / 32 = 1.5
+    float factor = desired / initial;
+    s.setScale(factor, factor);
+    s.setTexture(*base);
+
+    random_rerenders.emplace_back(std::make_unique<sf::RenderTexture>());
+    auto& t = *random_rerenders.back().get();
+    if (not t.create(new_size, new_size))
+    {
+        // This will likely crash us, but I mean. Um. It's a problem.
+        get_logger("ResourceManager").error("Failed to create a render texture of size ", new_size, "!!!");
+        return nullptr;
+    }
+    t.draw(s);
+    t.display();
+
+    return &t.getTexture();
+}
+
+aa::ResourceManager::~ResourceManager() {}
 
 void aa::ResourceManager::loadCriteria(std::string path, std::string name)
 {
@@ -150,17 +185,28 @@ void aa::ResourceManager::loadAllCriteria()
     criteria["cats"] = {};
     current_         = &criteria["cats"];
     // Why Minecraft. Why.
-    loadCriteria("assets/sprites/global/criteria/cats/black.png", "textures/entity/cat/all_black.png");
-    loadCriteria("assets/sprites/global/criteria/cats/british_shorthair.png", "textures/entity/cat/british_shorthair.png");
-    loadCriteria("assets/sprites/global/criteria/cats/calico.png", "textures/entity/cat/calico.png");
-    loadCriteria("assets/sprites/global/criteria/cats/jellie.png", "textures/entity/cat/jellie.png");
-    // loadCriteria("assets/sprites/global/criteria/cats/ocelot.png", "textures/entity/cat/ocelot.png");
-    loadCriteria("assets/sprites/global/criteria/cats/persian.png", "textures/entity/cat/persian.png");
-    loadCriteria("assets/sprites/global/criteria/cats/ragdoll.png", "textures/entity/cat/ragdoll.png");
+    // TODO - we can actually fix this. CTM's asset map properly maps these assets in @icon. For
+    // now, whatever, this system works. Later we should do better asset management...
+    loadCriteria("assets/sprites/global/criteria/cats/black.png",
+                 "textures/entity/cat/all_black.png");
+    loadCriteria("assets/sprites/global/criteria/cats/british_shorthair.png",
+                 "textures/entity/cat/british_shorthair.png");
+    loadCriteria("assets/sprites/global/criteria/cats/calico.png",
+                 "textures/entity/cat/calico.png");
+    loadCriteria("assets/sprites/global/criteria/cats/jellie.png",
+                 "textures/entity/cat/jellie.png");
+    // loadCriteria("assets/sprites/global/criteria/cats/ocelot.png",
+    // "textures/entity/cat/ocelot.png");
+    loadCriteria("assets/sprites/global/criteria/cats/persian.png",
+                 "textures/entity/cat/persian.png");
+    loadCriteria("assets/sprites/global/criteria/cats/ragdoll.png",
+                 "textures/entity/cat/ragdoll.png");
     loadCriteria("assets/sprites/global/criteria/cats/red.png", "textures/entity/cat/red.png");
-    loadCriteria("assets/sprites/global/criteria/cats/siamese.png", "textures/entity/cat/siamese.png");
+    loadCriteria("assets/sprites/global/criteria/cats/siamese.png",
+                 "textures/entity/cat/siamese.png");
     loadCriteria("assets/sprites/global/criteria/cats/tabby.png", "textures/entity/cat/tabby.png");
-    loadCriteria("assets/sprites/global/criteria/cats/tuxedo.png", "textures/entity/cat/black.png");
+    loadCriteria("assets/sprites/global/criteria/cats/tuxedo.png",
+                 "textures/entity/cat/black.png");
     loadCriteria("assets/sprites/global/criteria/cats/white.png", "textures/entity/cat/white.png");
     criteria["food"] = {};
     current_         = &criteria["food"];

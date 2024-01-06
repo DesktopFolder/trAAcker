@@ -20,54 +20,30 @@ struct TurnTable
         }
 
         // This is not stellar...
-        sf::Sprite sprite16;
-        sf::Sprite sprite32;
-        sf::Sprite sprite48;
-        sf::Sprite sprite512;
-
-        float sz = inner_size;
-        sprite16.setScale(sz / 16.0, sz / 16.0);
-        sprite32.setScale(sz / 32.0, sz / 32.0);
-        sprite48.setScale(sz / 48.0, sz / 48.0);
-        sprite512.setScale(sz / 512.0, sz / 512.0);
+        sf::Sprite sprite;
 
         const auto winX = win.getSize().x;
 
         const auto TO_DRAW = (winX / TurnTable::tile_size) + 2;
 
+        uint64_t first = rb_.get(0).text->getSize().x;
         for (int64_t i = 0; i < TO_DRAW; i++)
         {
-            sf::Sprite* sprite;
             // set the texture of the sprite
             const auto& [name, texture, draw_bg] = rb_.get(i);
             const auto xv                        = texture->getSize().x;
-            if (xv == 16)
+
+            if (first != xv)
             {
-                sprite = &sprite16;
-            }
-            else if (xv == 32)
-            {
-                sprite = &sprite32;
-            }
-            else if (xv == 512)
-            {
-                // these are (well, it's just one, but) animated sprites
-                // really need to clip our actual sprite out
-                sprite = &sprite512;
-            }
-            else
-            {
-                if (xv != 48)
-                {
-                    logger.fatal_error("Got texture size that is invalid? ", xv,
-                                       " for texture: ", name);
-                }
-                sprite = &sprite48;
+                // Basically an assertion.
+                logger.fatal_error("Got first: ", first, " that is not equal to xv: ", xv);
             }
 
-            sprite->setTexture(*texture);
-            sprite->setPosition(static_cast<float>((tile_size * i) - offset_) + xOffset_, yOffset_);
-            win.draw(*sprite);
+            sprite.setTexture(*texture);
+            // Integer math. Consistent & fine.
+            const int64_t generic_offset = tile_size * i - offset_ + xOffset_;
+            sprite.setPosition(static_cast<float>(generic_offset), yOffset_);
+            win.draw(sprite);
         }
 
         // now we animate, because we're bad, and this is easier, and then we start from 0
@@ -110,6 +86,11 @@ struct TurnTable
         return tile_size;
     }
 
+    int64_t get_texture_size()
+    {
+        return inner_size;
+    }
+
     void update_validate()
     {
         tile_size = padding * 2 + inner_size;
@@ -124,7 +105,7 @@ struct TurnTable
     // Configuration
     uint8_t rate_  = 1;
     float yOffset_ = 0;
-    float xOffset_ = 8.0;
+    int64_t xOffset_ = 8;
 
 private:
     // Keep these private. Change with set_*

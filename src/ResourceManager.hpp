@@ -3,6 +3,7 @@
 #include "utilities.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
+#include <SFML/Graphics/RenderTexture.hpp>
 #include <memory>
 #include <string>
 
@@ -32,14 +33,17 @@ struct ResourceManager
     void ensureLoadAdvancement(std::string id, std::string icon);
 
     /* Literally just jams a texture into a vector of unique pointers. */
-    sf::Texture* store_texture_at(std::string path)
+    const sf::Texture* store_texture_at(std::string path)
     {
         random_textures.emplace_back(std::make_unique<sf::Texture>());
         random_textures.back()->loadFromFile(path);
         return random_textures.back().get();
     }
 
+    const sf::Texture* remap_texture(const sf::Texture* base, uint64_t new_size);
+
     std::vector<std::unique_ptr<sf::Texture>> random_textures;
+    std::vector<std::unique_ptr<sf::RenderTexture>> random_rerenders;
 
     // unused atm
     std::unordered_map<std::string, std::unordered_map<std::string, sf::Texture>> criteria;
@@ -51,6 +55,7 @@ struct ResourceManager
 
 private:
     ResourceManager() { loadAllCriteria(); }
+    ~ResourceManager();
     void loadCriteria(std::string, std::string);
     // IMPLEMENTATION DETAIL DON'T LOOK IT IS VERY BAD :)
     // later: wtf
