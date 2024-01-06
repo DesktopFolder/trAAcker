@@ -1,11 +1,41 @@
 #pragma once
 
 #include "utilities.hpp"
+#include "logging.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <memory>
 #include <string>
+
+namespace sf { class Font; }
+
+inline std::pair<std::string, std::string> basic_string_splitter(std::string_view s)
+{
+    // Very simple algorithm.
+    // Our goal is to split at the 'most central' point of the string.
+    const size_t center = s.size() / 2;
+    size_t left = center;
+    size_t right = center;
+    while (true)
+    {
+        if (s[left] == ' ')
+        {
+            return {std::string{s.substr(0, left)}, std::string{s.substr(left+1)}};
+        }
+        if (s[right] == ' ')
+        {
+            return {std::string{s.substr(0, right)}, std::string{s.substr(right+1)}};
+        }
+        if (left == 0 && right == s.size() - 1)
+        {
+            log::error("Cannot split the string: ", s);
+            throw std::runtime_error("Failed to split a string.");
+        }
+        if (left != 0) { left -= 1; }
+        if (right != s.size() - 1) { right += 1; }
+    }
+}
 
 namespace aa
 {
@@ -28,9 +58,9 @@ struct ResourceManager
     }
     void loadAllCriteria();
 
-    void commit() { no_load = true; }
+    static sf::Drawable& basic_marker(float radius, float x, float y);
 
-    void ensureLoadAdvancement(std::string id, std::string icon);
+    void commit() { no_load = true; }
 
     /* Literally just jams a texture into a vector of unique pointers. */
     const sf::Texture* store_texture_at(std::string path)
@@ -39,6 +69,8 @@ struct ResourceManager
         random_textures.back()->loadFromFile(path);
         return random_textures.back().get();
     }
+
+    const sf::Font& get_font();
 
     const sf::Texture* remap_texture(const sf::Texture* base, uint64_t new_size);
 

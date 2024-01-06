@@ -117,12 +117,14 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
              *       },
              */
             const auto id = manifest::parse_advancement_id(a);
-            logger.debug("Got ID: ", id.full_id, " (category: ", id.category, ", name: ", id.icon,
-                         ")");
+            std::string pretty_name = a["@name"];
+            std::string short_name = get_or(a, "@short_name", pretty_name);
+            logger.debug("Got ID: ", id.full_id, " (category: ", id.category, ", icon name: ", id.icon,
+                         ") actual name: ", pretty_name, " short name: ", short_name);
             // "minecraft:adventure/two_birds_one_arrow"
             // -> ["adventure/two_birds_one_arrow", "two_birds_one_arrow"]
             auto [itr, success] =
-                ret.advancements.emplace(id.full_id, Advancement{id.icon, id.category});
+                ret.advancements.emplace(id.full_id, Advancement{id.icon, id.category, pretty_name, short_name});
             if (!success)
             {
                 logger.warning("Failed to insert advancement: ", id.full_id);
@@ -146,6 +148,7 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
                     const auto crit = manifest::unprefixed_id(c);
                     const std::string icon =
                         c.contains("@icon") ? c["@icon"].template get<std::string>() : crit;
+                    logger.debug("Adding criterion: ", crit);
                     if (not rm.criteria_map.contains(icon))
                     {
                         if (not rm.criteria_map.contains(crit))

@@ -2,13 +2,24 @@
 
 #include "logging.hpp"
 
-#include <filesystem>
 #include <SFML/Graphics.hpp>
+#include <filesystem>
 
 aa::ResourceManager& aa::ResourceManager::instance()
 {
     static aa::ResourceManager mgr{};
     return mgr;
+}
+
+sf::Drawable& aa::ResourceManager::basic_marker(float radius, float x, float y)
+{
+    static sf::CircleShape shape{};
+
+    shape.setRadius(radius);
+    shape.setFillColor(sf::Color::Cyan);
+    shape.setPosition(x, y);
+
+    return shape;
 }
 
 void asset_helper(auto& dir_entry, auto& assets)
@@ -30,20 +41,40 @@ std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()
 {
     namespace fs = std::filesystem;
 
-    std::unordered_map<std::string, std::string> assets;
+    static std::unordered_map<std::string, std::string> assets = []()
+    {
+        std::unordered_map<std::string, std::string> result;
+        for (const fs::directory_entry& dir_entry :
+             fs::recursive_directory_iterator("assets/inject/"))
+        {
+            asset_helper(dir_entry, result);
+        }
+        for (const fs::directory_entry& dir_entry :
+             fs::recursive_directory_iterator("assets/sprites/global/"))
+        {
+            asset_helper(dir_entry, result);
+        }
+        for (const fs::directory_entry& dir_entry :
+             fs::recursive_directory_iterator("assets/sprites/gif/"))
+        {
+            asset_helper(dir_entry, result);
+        }
 
-    for (const fs::directory_entry& dir_entry :
-         fs::recursive_directory_iterator("assets/sprites/global/"))
-    {
-        asset_helper(dir_entry, assets);
-    }
-    for (const fs::directory_entry& dir_entry :
-         fs::recursive_directory_iterator("assets/sprites/gif/"))
-    {
-        asset_helper(dir_entry, assets);
-    }
+        return result;
+    }();
 
     return assets;
+}
+
+const sf::Font& aa::ResourceManager::get_font() {
+    static const sf::Font font = []()
+    {
+        sf::Font font;
+        font.loadFromFile("assets/fonts/minecraft.otf");
+        font.setSmooth(false);
+        return font;
+    }();
+    return font;
 }
 
 const sf::Texture* aa::ResourceManager::remap_texture(const sf::Texture* base, uint64_t new_size)
@@ -69,7 +100,8 @@ const sf::Texture* aa::ResourceManager::remap_texture(const sf::Texture* base, u
     if (not t.create(new_size, new_size))
     {
         // This will likely crash us, but I mean. Um. It's a problem.
-        get_logger("ResourceManager").error("Failed to create a render texture of size ", new_size, "!!!");
+        get_logger("ResourceManager")
+            .error("Failed to create a render texture of size ", new_size, "!!!");
         return nullptr;
     }
     t.draw(s);

@@ -28,3 +28,22 @@ using transparent_string_hash = overload<
 
 template<typename T>
 using string_map = std::unordered_map<std::string, T, transparent_string_hash, std::equal_to<>>;
+
+template <typename T>
+auto get_or(const auto& js, auto key, T default_value) -> T
+{
+    if (js.contains(key))
+    {
+        return js[key].template get<T>();
+    }
+    return default_value;
+}
+
+template <typename F>
+auto apply(const auto& js, auto key, F&& operation) -> void
+{
+    if (js.contains(key))
+    {
+        operation(js[key]);
+    }
+}

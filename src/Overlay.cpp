@@ -28,6 +28,9 @@ aa::OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann
     prereqs.xOffset_ = get_or(config, "criteria-x", prereqs.xOffset_);
     reqs.xOffset_    = get_or(config, "advancement-x", prereqs.xOffset_);
 
+    reqs.drawText = not get_or(config, "disable-advancement-text", false);
+    reqs.fontSize = get_or(config, "advancement-font-size", reqs.fontSize);
+
     aa::conf::apply(config, "rate", [&](int rate) { setRate(static_cast<uint8_t>(rate)); });
 
     get_logger("OverlayManager")
@@ -80,7 +83,7 @@ void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)
 
     for (auto& [k, v] : status.incomplete)
     {
-        reqs.emplace(k, v.icon);
+        reqs.emplace(v.pretty_name, v.icon);
 
         for (auto& [ck, cv] : v.criteria)
         {

@@ -19,6 +19,8 @@ struct Advancement
      */
     std::string name;
     std::string category;
+    std::string pretty_name;
+    std::string short_name;
 
     std::string full_id() const {
         return category + "/" + name;
