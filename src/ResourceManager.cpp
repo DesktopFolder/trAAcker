@@ -32,9 +32,23 @@ void asset_helper(auto& dir_entry, auto& assets)
     {
         // we have this asset loaded already
         // continue unless this is HIGH RESOLUTION OOOO
-        if (s.size() < 3 || s[s.size() - 3] != '^') return;
+        if (s.size() < 7 || s[s.size() - 7] != '^') return;
+        auto& logger = get_logger("ResourceManager");
+        // okay that doesn't actually work properly lol.
+        // we always just want the highest resolution asset.
+        // if we make it 'here', we know that s[s.size() - 3] == '^'.
+        // We can kind of hack together how this works. Quite easily.
+        logger.debug("Got high quality image: ", s);
+        const auto& current = assets[aa::ResourceManager::assetName(s)];
+        logger.debug("Current image is: ", current);
+        if (current[current.size() - 6] > s[s.size() - 6])
+        {
+            logger.debug("Decided to keep the current image.");
+            return;
+        }
+        logger.debug("Decided to overwrite with the new image.");
     }
-    assets.emplace(aa::ResourceManager::assetName(s), s);
+    assets.insert_or_assign(aa::ResourceManager::assetName(s), s);
 }
 
 std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()

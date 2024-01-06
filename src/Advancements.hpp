@@ -28,6 +28,13 @@ struct Advancement
 
     // Just do this for now. Deal with names later.
     string_map<const sf::Texture*> criteria;
+    std::vector<std::string> criteria_ordered;
+
+    void add_criteria(std::string key, const sf::Texture* t)
+    {
+        criteria.emplace(key, t);
+        criteria_ordered.push_back(key);
+    }
 
     const sf::Texture* icon;
 };

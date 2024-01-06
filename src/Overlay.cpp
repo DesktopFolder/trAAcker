@@ -85,9 +85,9 @@ void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)
     {
         reqs.emplace(v.pretty_name, v.icon);
 
-        for (auto& [ck, cv] : v.criteria)
+        for (auto loc : v.criteria_ordered)
         {
-            prereqs.emplace(ck, cv);
+            prereqs.emplace("", v.criteria.find(loc)->second);
         }
     }
 }

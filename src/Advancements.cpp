@@ -116,15 +116,16 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
              *         "@half": "false"
              *       },
              */
-            const auto id = manifest::parse_advancement_id(a);
+            const auto id           = manifest::parse_advancement_id(a);
             std::string pretty_name = a["@name"];
-            std::string short_name = get_or(a, "@short_name", pretty_name);
-            logger.debug("Got ID: ", id.full_id, " (category: ", id.category, ", icon name: ", id.icon,
-                         ") actual name: ", pretty_name, " short name: ", short_name);
+            std::string short_name  = get_or(a, "@short_name", pretty_name);
+            logger.debug("Got ID: ", id.full_id, " (category: ", id.category,
+                         ", icon name: ", id.icon, ") actual name: ", pretty_name,
+                         " short name: ", short_name);
             // "minecraft:adventure/two_birds_one_arrow"
             // -> ["adventure/two_birds_one_arrow", "two_birds_one_arrow"]
-            auto [itr, success] =
-                ret.advancements.emplace(id.full_id, Advancement{id.icon, id.category, pretty_name, short_name});
+            auto [itr, success] = ret.advancements.emplace(
+                id.full_id, Advancement{id.icon, id.category, pretty_name, short_name});
             if (!success)
             {
                 logger.warning("Failed to insert advancement: ", id.full_id);
@@ -156,10 +157,10 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
                             logger.fatal_error("Could not find criteria texture for: ", icon,
                                                " (In advancement: ", adv.full_id(), ")");
                         }
-                        adv.criteria.emplace(crit, rm.criteria_map[crit].get());
+                        adv.add_criteria(crit, rm.criteria_map[crit].get());
                         continue;
                     }
-                    adv.criteria.emplace(crit, rm.criteria_map[icon].get());
+                    adv.add_criteria(crit, rm.criteria_map[icon].get());
                 }
             }
 
@@ -290,6 +291,8 @@ AdvancementStatus AdvancementStatus::from_file(std::string_view filename,
                     //                   " is not present in advancement ", name);
                     continue;
                 }
+                adv.criteria_ordered.erase(
+                    std::find(adv.criteria_ordered.begin(), adv.criteria_ordered.end(), crit_key));
                 adv.criteria.erase(crit_key);
             }
         }
