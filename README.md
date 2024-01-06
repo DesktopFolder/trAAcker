@@ -10,14 +10,15 @@ Implementation status:
     - [ ] macOS
     - [ ] Linux??
 - [ ] Automatic world detection
-- [x] Integrated file update detection (WIP)
+- [x] Integrated file update detection
 - [ ] Automatic open window detection
 - [ ] **Overlay Feature Parity**
     - [x] Renders all 80 advancements and the normal set of criteria (biomes, foods, etc)
     - [x] Can update to reflect the game state given an advancements JSON file
     - [x] Automatic updating to the most recent file in a saves/ folder
+    - [x] Configurable rendering positions / sizes
     - [ ] Full automatic updating support
-    - [ ] Configurable rendering sizes / fonts?
+    - [ ] Configurable fonts / text display?
     - [ ] Text rendering for names, backgrounds for images, etc
 - [ ] **Main window features**
     - [x] It exists
