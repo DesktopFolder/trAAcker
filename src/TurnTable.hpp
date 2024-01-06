@@ -66,7 +66,7 @@ struct TurnTable
             }
 
             sprite->setTexture(*texture);
-            sprite->setPosition(static_cast<float>((tile_size * i) - offset_) + 8.f, yOffset_);
+            sprite->setPosition(static_cast<float>((tile_size * i) - offset_) + xOffset_, yOffset_);
             win.draw(*sprite);
         }
 
@@ -124,6 +124,7 @@ struct TurnTable
     // Configuration
     uint8_t rate_  = 1;
     float yOffset_ = 0;
+    float xOffset_ = 8.0;
 
 private:
     // Keep these private. Change with set_*

@@ -65,27 +65,31 @@ struct Logger
     // Level 0 - Only logged when we are at the most verbose.
     // Anything that would hugely spam the logs should be under this.
     template <typename... Ts>
-    void debug(Ts&&... ts) const
+    const Logger& debug(Ts&&... ts) const
     {
         write_endl(str_debug_, std::forward<Ts>(ts)...);
+        return *this;
     }
 
     template <typename... Ts>
-    void info(Ts&&... ts) const
+    const Logger& info(Ts&&... ts) const
     {
         write_endl(str_info_, std::forward<Ts>(ts)...);
+        return *this;
     }
 
     template <typename... Ts>
-    void warning(Ts&&... ts) const
+    const Logger& warning(Ts&&... ts) const
     {
         write_endl(str_warning_, std::forward<Ts>(ts)...);
+        return *this;
     }
 
     template <typename... Ts>
-    void error(Ts&&... ts) const
+    const Logger& error(Ts&&... ts) const
     {
         write_endl(str_error_, std::forward<Ts>(ts)...);
+        return *this;
     }
 
     template <typename... Ts>
