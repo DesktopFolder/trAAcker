@@ -406,7 +406,7 @@
       },
       {
         "@id": "minecraft:end/kill_dragon",
-        "@name": "\u00a0Free\u00a0the\u00a0 End",
+        "@name": "Free the End",
         "@short_name": "Free End"
       },
       {
@@ -428,7 +428,7 @@
       },
       {
         "@id": "minecraft:end/dragon_breath",
-        "@name": "You Need a\u00a0Mint",
+        "@name": "You Need a Mint",
         "@short_name": "Need a Mint",
         "@type": "goal"
       },
@@ -808,7 +808,7 @@
       },
       {
         "@id": "minecraft:story/iron_tools",
-        "@name": "Isn't It Iron\u00a0Pick",
+        "@name": "Isn't It Iron Pick",
         "@short_name": "Iron Pick"
       },
       {
@@ -889,7 +889,7 @@
       },
       {
         "@id": "minecraft:nether/use_lodestone",
-        "@name": "Country\u00a0Lode, Take Me Home",
+        "@name": "Country Lode, Take Me Home",
         "@short_name": "Lodestone",
         "@half": "false"
       },
@@ -951,7 +951,7 @@
       },
       {
         "@id": "minecraft:nether/obtain_ancient_debris",
-        "@name": "Hidden in the\u00a0Depths",
+        "@name": "Hidden in the Depths",
         "@short_name": "The Depths"
       },
       {
@@ -992,7 +992,7 @@
       },
       {
         "@id": "minecraft:nether/netherite_armor",
-        "@name": "Cover Me in\u00a0Debris",
+        "@name": "Cover Me in Debris",
         "@short_name": "In Debris",
         "@type": "challenge",
         "@half": "false"
@@ -1034,7 +1034,7 @@
       },
       {
         "@id": "minecraft:nether/get_wither_skull",
-        "@name": "Spooky\u00a0Scary Skeleton",
+        "@name": "Spooky Scary Skeleton",
         "@short_name": "Spooky",
         "@half": "false"
       },
