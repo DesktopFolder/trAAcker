@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 
-#include "app_finder.hpp""
+#include "app_finder.hpp"
 #include "logging.hpp"
 
 #include "src/ConfigProvider.hpp"
