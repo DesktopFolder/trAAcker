@@ -1,6 +1,7 @@
 #include "ResourceManager.hpp"
 
 #include "logging.hpp"
+#include "ConfigProvider.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <filesystem>
@@ -85,7 +86,7 @@ const sf::Font& aa::ResourceManager::get_font() {
     {
         sf::Font font;
         font.loadFromFile("assets/fonts/minecraft.otf");
-        font.setSmooth(false);
+        font.setSmooth(aa::conf::get_or(aa::conf::get(), "antialiasing", false));
         return font;
     }();
     return font;

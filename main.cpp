@@ -4,6 +4,7 @@
 #include <iostream>
 #include <thread>
 
+#include "app_finder.hpp""
 #include "logging.hpp"
 
 #include "src/ConfigProvider.hpp"
@@ -30,9 +31,11 @@ int main()
         set_default_file(logfile.value());
     }
     const uint64_t sleep_ms = aa::conf::get_or(conf, "loop-sleep", 1);
-    const bool vsync = aa::conf::get_or(conf, "vsync", false);
+    const bool vsync        = aa::conf::get_or(conf, "vsync", false);
 
     Logger::stdout_default = aa::conf::get_or(conf, "verbose", false);
+    // Any temporary test code goes here, we have logging now but haven't
+    // really loaded anything up.
 
     // Todo: It would be really cool if we could do lazy/background loading
     // of assets here. Just launch off a std::thread and do window setup
@@ -118,6 +121,8 @@ int main()
         if (ticks % 60 == 0)
         {
             // call: providergetturntable?
+            auto s = get_focused_application(mainwindow);
+            log::debug("Current application maybe, unless this crashes! ", s.exec, s.name, s.pid);
         }
 
         /*

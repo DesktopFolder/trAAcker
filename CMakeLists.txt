@@ -85,11 +85,18 @@ FetchContent_Declare(json
 FetchContent_MakeAvailable(json)
 endif()
 
+set(CROSS_PLATFORM_DEPENDENCIES )
+if (APPLE)
+    list(APPEND CROSS_PLATFORM_DEPENDENCIES "include/osx/Focus2Wrapper.mm")
+endif()
+
 add_executable(
     AAToolCPP
     # Library things
     include/dmon.cpp include/dmon.hpp
     include/logging.cpp include/logging.hpp
+    # Cursed things
+    ${CROSS_PLATFORM_DEPENDENCIES}
     # Source things? Hmmm
     src/Advancements.cpp src/Advancements.hpp
     src/Overlay.cpp src/Overlay.hpp
@@ -114,6 +121,7 @@ if(APPLE)
     target_link_libraries(AAToolCPP PRIVATE
         "-framework CoreFoundation"
         "-framework CoreServices"
+        "-framework AppKit"
     )
 endif()
 target_link_libraries(AAToolCPP PRIVATE "-lpthread")

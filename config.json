@@ -1,11 +1,11 @@
 {
+    "antialiasing": false,
     "overlay": {
         "criteria-y": 10,
         "criteria-size": 24,
         "criteria-padding": 1,
         "advancement-padding": 16,
         "advancement-font-size": 12,
-        "antialiasing": false,
         "frame": "none"
     },
     "window": {
