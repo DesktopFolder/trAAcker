@@ -121,8 +121,12 @@ int main()
         if (ticks % 60 == 0)
         {
             // call: providergetturntable?
-            auto s = get_focused_application(mainwindow);
-            log::debug("Current application maybe, unless this crashes! ", s.exec, s.name, s.pid);
+            //auto s = get_focused_application(mainwindow);
+            //log::debug("Current application maybe, unless this crashes! ", s.exec, s.name, s.pid);
+            if (const auto fm = get_focused_minecraft(mainwindow); fm.has_value())
+            {
+                log::debug("Found a focused Minecraft instance path: ", *fm);
+            }
         }
 
         /*
