@@ -12,6 +12,11 @@ ApplicationInfo osx::get_current_application()
     NSRunningApplication* focusedApp;
     focusedApp = [[NSWorkspace sharedWorkspace] frontmostApplication];
 
+    if (focusedApp == nullptr)
+    {
+        return app;
+    }
+
     app.pid  = [focusedApp processIdentifier];
     app.name = std::string([[focusedApp localizedName] UTF8String]);
     app.exec = std::string([[[focusedApp executableURL] lastPathComponent] UTF8String]);
