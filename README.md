@@ -1,27 +1,31 @@
-# trAAcker: A Minecraft 1.16.1 advancements tracker for your binary-code-executing operating system
+# trAAcker
+## A cross-platform Minecraft 1.16.1 advancements tracker
 
-This is a port of a subset of the utilities provided by CTM's AATool to be cross-platform.
+This application is a reimplementation of a subset of the utilities provided by [CTM's AATool](https://github.com/DarwinBaker/AATool) to be cross-platform.
 
-See [the todo list](todo.md) for a list of currently planned / WIP features.
+See [the todo list](todo.md) for a potentially more comprehensive list of currently planned / WIP features.
 
-Implementation status:
-- [ ] Automatic instance detection
+**Implementation status**:
+- [ ] Automatic focused instance detection
     - [ ] Windows
-    - [ ] macOS
-    - [ ] Linux??
+    - [x] macOS - functional, does not work with watches yet.
+    - [ ] Linux
 - [ ] Automatic world detection
 - [x] Integrated file update detection
-- [ ] Automatic open window detection
 - [ ] **Overlay Feature Parity**
     - [x] Renders all 80 advancements and the normal set of criteria (biomes, foods, etc)
     - [x] Can update to reflect the game state given an advancements JSON file
     - [x] Automatic updating to the most recent file in a saves/ folder
     - [x] Configurable rendering positions / sizes
+    - [x] Text rendering for advancement names
+    - [ ] Frames for advancements
     - [ ] Full automatic updating support
-    - [ ] Configurable fonts / text display?
-    - [ ] Text rendering for names, backgrounds for images, etc
+    - [ ] Configurable fonts / text display? *not currently planned, but aliasing and size can be configured*
 - [ ] **Main window features**
-    - [x] It exists
-    - [ ] Literally anything else :)
+    - [ ] Default (CTM) layout
+    - [ ] Automatic layout (resizing)
+    - [ ] Fully configurable layouts
 - [ ] Reminders / guide window
     - [ ] It exists
+- [ ] Full Voice Acting
+    - [ ] This is a joke, trust me :)
