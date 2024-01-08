@@ -10,8 +10,8 @@
 #include "utilities.hpp"
 #include <fstream>
 #include <iostream>
-#include <sstream>
 #include <optional>
+#include <sstream>
 
 // just for now, for safety reasons... lol
 namespace detail
@@ -46,6 +46,15 @@ inline void set_default_file(std::string_view name)
     files.find(name)->second.swap(files.find("__default__")->second);
 }
 
+enum class LogLevel
+{
+    Debug,
+    Info,
+    Warning,
+    Error,
+    None,
+};
+
 struct Logger
 {
     // Not super configurable, but it works for now.
@@ -53,42 +62,57 @@ struct Logger
     bool write_stdout;
 
     static bool stdout_default;
+    static LogLevel level;
 
     Logger(std::string name)
         : name_(std::move(name)), str_debug_("DEBUG (" + name_ + "): "),
           str_warning_("WARNING (" + name_ + "): "), str_error_("ERROR (" + name_ + "): "),
-          str_info_("INFO (" + name_ + "): "),
-          write_stdout(stdout_default)
+          str_info_("INFO (" + name_ + "): "), write_stdout(stdout_default)
     {
     }
+
+    [[maybe_unused]] static LogLevel set_level(std::string_view level);
 
     // Level 0 - Only logged when we are at the most verbose.
     // Anything that would hugely spam the logs should be under this.
     template <typename... Ts>
-    const Logger& debug(Ts&&... ts) const
+    [[maybe_unused]] const Logger& debug(Ts&&... ts) const
     {
-        write_endl(str_debug_, std::forward<Ts>(ts)...);
+        if (to_underlying(level) <= to_underlying(LogLevel::Debug))
+        {
+            write_endl(str_debug_, std::forward<Ts>(ts)...);
+        }
         return *this;
     }
 
     template <typename... Ts>
-    const Logger& info(Ts&&... ts) const
+    [[maybe_unused]] const Logger& info(Ts&&... ts) const
     {
-        write_endl(str_info_, std::forward<Ts>(ts)...);
+        if (to_underlying(level) <= to_underlying(LogLevel::Info))
+        {
+            // Info = 1, Debug = 0.
+            write_endl(str_info_, std::forward<Ts>(ts)...);
+        }
         return *this;
     }
 
     template <typename... Ts>
-    const Logger& warning(Ts&&... ts) const
+    [[maybe_unused]] const Logger& warning(Ts&&... ts) const
     {
-        write_endl(str_warning_, std::forward<Ts>(ts)...);
+        if (to_underlying(level) <= to_underlying(LogLevel::Warning))
+        {
+            write_endl(str_warning_, std::forward<Ts>(ts)...);
+        }
         return *this;
     }
 
     template <typename... Ts>
-    const Logger& error(Ts&&... ts) const
+    [[maybe_unused]] const Logger& error(Ts&&... ts) const
     {
-        write_endl(str_error_, std::forward<Ts>(ts)...);
+        if (to_underlying(level) <= to_underlying(LogLevel::Error))
+        {
+            write_endl(str_error_, std::forward<Ts>(ts)...);
+        }
         return *this;
     }
 
@@ -97,15 +121,15 @@ struct Logger
     {
         std::ostringstream ss;
 
-        auto b = write_stdout;
+        auto b  = write_stdout;
         auto* f = file;
 
         write_stdout = false;
-        file = &ss;
+        file         = &ss;
         error(std::forward<Ts>(ts)...);
 
         write_stdout = b;
-        file = f;
+        file         = f;
         error(std::forward<Ts>(ts)...);
 
         throw std::runtime_error(ss.str());

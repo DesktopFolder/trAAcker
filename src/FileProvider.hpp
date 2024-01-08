@@ -15,11 +15,16 @@ struct CurrentFileProvider
 
     dmon::Watch watcher;
 
-    std::optional<std::string> poll();
+    std::optional<std::string> poll(uint64_t ticks = 0);
 
     void debug();
 
 private:
     Logger* logger;
+
+    // Should these defaults all be in like, DEFAULTS.hpp
+    // so they can be properly documented/referred to?
+    // e.g. /* poll_interval */ DEFAULT_POLL_INTERVAL
+    uint64_t poll_interval = 60;
 };
 }  // namespace aa

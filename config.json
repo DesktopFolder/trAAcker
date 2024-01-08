@@ -25,5 +25,6 @@
     },
     "log": "aatool.log",
     "vsync": true,
-    "verbose": true
+    "verbose": true,
+    "log-level": "debug"
 }

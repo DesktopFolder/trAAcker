@@ -34,6 +34,7 @@ int main()
     const bool vsync        = aa::conf::get_or(conf, "vsync", false);
 
     Logger::stdout_default = aa::conf::get_or(conf, "verbose", false);
+    Logger::set_level(aa::conf::get_or<std::string>(conf, "log-level", "info"));
     // Any temporary test code goes here, we have logging now but haven't
     // really loaded anything up.
 
@@ -112,7 +113,7 @@ int main()
         wm.clearAll();
 
         // poll after handling events...
-        if (const auto result = fp.poll(); result.has_value())
+        if (const auto result = fp.poll(ticks); result.has_value())
         {
             log::debug("Attempting to reset from found updated file: ", result.value());
             ov.reset_from_file(result.value(), manifest);

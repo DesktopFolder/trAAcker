@@ -5,6 +5,7 @@
 
 #include <optional>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace sf
 {
@@ -36,7 +37,11 @@ inline std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x)
     const auto s = get_focused_application(x);
     if (not s.exec.starts_with("java"))
     {
-        logger.debug("Ignored application: ", s.exec);
+        static std::unordered_set<std::string> ignored;
+        if (ignored.emplace(s.exec).second)
+        {
+            logger.debug("Ignored application: ", s.exec);
+        }
         return {};
     }
     const int pid = s.pid;
@@ -124,9 +129,10 @@ inline std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x)
     // Got arguments: '/opt/homebrew/opt/openjdk/bin/java -Xdock:icon=icon.png
     // -Xdock:name="Prism Launcher: AA Tracker Testing" -XstartOnFirstThread
     // -Xms512m -Xmx4096m -Duser.language=en
-    // -Djava.library.path=/Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/natives
-    // -cp /private/var/folders/l9/xlt__xp92pbg92834dhv38r40000gn/T/AppTranslocation/927FB467-2D15-47ED-8346-
-    int arg_counter = 0;
+    // -Djava.library.path=/Users/user/Library/Application Support/PrismLauncher/instances/AA
+    // Tracker Testing/natives -cp
+    // /private/var/folders/l9/xlt__xp92pbg92834dhv38r40000gn/T/AppTranslocation/927FB467-2D15-47ED-8346-
+    int arg_counter       = 0;
     size_t start_location = argument_start;
     for (; arg_counter < argc && itr < argsize; itr++)
     {
@@ -144,20 +150,20 @@ inline std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x)
             std::string_view prefix = "-Djava.library.path=";
             if (sv.starts_with(prefix))
             {
-                logger.debug("Found library path: discovering instance."); 
+                logger.debug("Found library path: discovering instance.");
                 std::string_view inst_str = "/instances/";
-                size_t pos = sv.rfind(inst_str);
+                size_t pos                = sv.rfind(inst_str);
                 if (pos == std::string_view::npos)
                 {
                     logger.warning("Could not find instances path: no /instances/.");
                     cache.emplace(pid, std::nullopt);
                     return {};
                 }
-                
+
                 size_t end = sv.find('/', pos + inst_str.size());
 
-auto result = std::string{sv.substr(prefix.size(), end - prefix.size())};
-cache.insert_or_assign(pid, result);
+                auto result = std::string{sv.substr(prefix.size(), end - prefix.size())};
+                cache.insert_or_assign(pid, result);
                 return result;
             }
 
@@ -165,7 +171,7 @@ cache.insert_or_assign(pid, result);
             start_location = itr + 1;
         }
     }
-    
+
     /*
     // EXAMPLE CODE - SIMPLE
     int arg_counter = 0;

@@ -1,6 +1,7 @@
 #include "logging.hpp"
 
 bool Logger::stdout_default = false;
+LogLevel Logger::level      = LogLevel::Debug;
 
 string_map<std::unique_ptr<std::ofstream>>& detail::get_files()
 {
@@ -62,4 +63,36 @@ Logger& get_logger(std::string_view name)
     }
 
     return loggers.find(name)->second;
+}
+
+LogLevel Logger::set_level(std::string_view level)
+{
+    if (level == "debug")
+    {
+        Logger::level = LogLevel::Debug;
+    }
+    else if (level == "info")
+    {
+        Logger::level = LogLevel::Info;
+    }
+    else if (level == "warning")
+    {
+        Logger::level = LogLevel::Warning;
+    }
+    else if (level == "error")
+    {
+        Logger::level = LogLevel::Error;
+    }
+    else if (level == "none")
+    {
+        Logger::level = LogLevel::None;
+    }
+    else
+    {
+        get_logger("Logger").fatal_error(
+            "Could not parse log level: '", level,
+            "'. Valid values are: 'debug', 'info', 'warning', 'error', or 'none'.");
+    }
+
+    return Logger::level;
 }
