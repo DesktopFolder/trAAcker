@@ -7,13 +7,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-namespace sf
-{
-class RenderWindow;
-}
-
-ApplicationInfo get_focused_application(sf::RenderWindow&);
-std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x);
+ApplicationInfo get_focused_application();
+std::optional<std::string> get_focused_minecraft();
 
 #if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
 // Windows specific code for getting the current application details.
@@ -25,22 +20,24 @@ std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x);
 #include <cassert>
 #include <sys/sysctl.h>
 
-inline ApplicationInfo get_focused_application(sf::RenderWindow&)
+inline ApplicationInfo get_focused_application()
 {
     return osx::get_current_application();
 }
 
-inline std::optional<std::string> get_focused_minecraft(sf::RenderWindow& x)
+inline std::optional<std::string> get_focused_minecraft()
 {
     const auto& logger = get_logger("get_focused_minecraft");
 
-    const auto s = get_focused_application(x);
+    const auto s = get_focused_application();
     if (not s.exec.starts_with("java"))
     {
         static std::unordered_set<std::string> ignored;
         if (ignored.emplace(s.exec).second)
         {
-            logger.debug("Ignored application: ", s.exec);
+            // Info log this - we only log once, so.
+            // Theoretically very helpful for debug dumps.
+            logger.info("Ignored application: ", s.exec);
         }
         return {};
     }

@@ -20,9 +20,7 @@
         }
     },
     "rate": 3,
-    "instance": {
-        "saves": "testing/"
-    },
+    "instances": ["testing/"],
     "log": "aatool.log",
     "vsync": true,
     "verbose": true,

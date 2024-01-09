@@ -4,6 +4,10 @@
 #import <AppKit/NSWorkspace.h>
 #import <Foundation/Foundation.h>
 
+/*
+TODO. https://stackoverflow.com/a/9084152
+*/
+
 ApplicationInfo osx::get_current_application()
 {
     // NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
