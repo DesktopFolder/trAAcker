@@ -176,7 +176,7 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
                              " not one of the instances listed in \"instances\".");
                 return std::string{""};
             }
-            logger->debug("No minecraft instance found.");
+            // logger->debug("No minecraft instance found.");
             // We don't currently have an instance open.
             return std::string{""};
         }
@@ -205,7 +205,7 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
     std::string current_advancement_dir;
     if (auto cur = most_recent_advancement_dir(current_instance); cur.has_value())
     {
-        logger->debug("Found advancement directory: ", *cur);
+        // logger->debug("Found advancement directory: ", *cur);
         current_advancement_dir = std::move(*cur);
     }
     else
