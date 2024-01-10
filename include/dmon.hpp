@@ -30,6 +30,7 @@ struct WatchData
 
     void check_change(std::string_view file_path)
     {
+        // This is ran in a second thread. Maybe dangerous.
         const auto& logger = get_logger("dmon");
         logger.debug("Watching '", file_watched, "', found ", file_path);
         if ((file_watched.empty() || file_path == file_watched) && not file_path.ends_with("~"))
