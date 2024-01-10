@@ -45,6 +45,11 @@ void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* root
         return;
     }
 
+    // LMAO. This does not work. As what if the watch data has been removed/deleted?
+    // Of course, that is nonfunctional. So we have a race condition around here-ish,
+    // which needs to be fixed. Can't believe I already ran into this within like 5
+    // minutes of testing this out. I don't understand how that is even POSSIBLE.
+    // Probably something obvious I'm missing, of course.
     reinterpret_cast<dmon::impl::WatchData*>(user)->check_change(filepath);
 }
 
