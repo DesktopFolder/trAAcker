@@ -119,17 +119,6 @@ int main()
             ov.reset_from_file(result.value(), manifest);
         }
 
-        if (ticks % 60 == 0)
-        {
-            // call: providergetturntable?
-            //auto s = get_focused_application(mainwindow);
-            //log::debug("Current application maybe, unless this crashes! ", s.exec, s.name, s.pid);
-            if (const auto fm = get_focused_minecraft(); fm.has_value())
-            {
-                log::debug("Found a focused Minecraft instance path: ", *fm);
-            }
-        }
-
         /*
         for (int i = 0; i < window.getSize().x / 64; i++) {
             auto& tile = rb.get(i);

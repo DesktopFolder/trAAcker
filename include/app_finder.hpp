@@ -42,7 +42,6 @@ inline std::optional<std::string> get_focused_minecraft()
         return {};
     }
     const int pid = s.pid;
-    logger.debug("Got minecraft with PID: ", pid);
 
     // Note - something about this function is SUPER laggy, causing us
     // to skip around a little when we're running it 1x/60frames.
@@ -52,6 +51,8 @@ inline std::optional<std::string> get_focused_minecraft()
     {
         return cache[pid];
     }
+
+    logger.debug("Got minecraft with PID: ", pid);
 
     // https://gist.github.com/nonowarn/770696
     // WTF?

@@ -1,0 +1,14 @@
+// CURRENT OUTPUT FOR A SINGLE WORLD SAVE.
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements
+DEBUG (dmon): Watching '', found 5d831a52-730a-4b4d-adb7-d1ea69617f3e.json
+DEBUG (dmon): Storing the fact that we found changes.
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements
+DEBUG (CurrentFileProvider): watcher with changes: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements/ of: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements/5d831a52-730a-4b4d-adb7-d1ea69617f3e.json
+DEBUG (root): Attempting to reset from found updated file: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements/5d831a52-730a-4b4d-adb7-d1ea69617f3e.json
+DEBUG (AdvancementStatus::from_file): Loading advancements from file: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements/5d831a52-730a-4b4d-adb7-d1ea69617f3e.json
+DEBUG (AdvancementStatus::from_file): Found advancement: minecraft:adventure/adventuring_time
+DEBUG (OverlayManager): Resetting from advancements.json manifest given file /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements/5d831a52-730a-4b4d-adb7-d1ea69617f3e.json
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements
+DEBUG (CurrentFileProvider): Found advancement directory: /Users/user/Library/Application Support/PrismLauncher/instances/AA Tracker Testing/.minecraft/saves/New World/advancements

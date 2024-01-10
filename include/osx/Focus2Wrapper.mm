@@ -16,6 +16,7 @@ ApplicationInfo osx::get_current_application()
     NSRunningApplication* focusedApp;
     focusedApp = [[NSWorkspace sharedWorkspace] frontmostApplication];
 
+    // not sure how this can possibly happen?
     if (focusedApp == nullptr)
     {
         return app;

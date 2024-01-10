@@ -28,7 +28,8 @@ struct CurrentFileProvider
 
     bool has_active_watch() const noexcept
     {
-        return not active_watch.empty();
+        //return not active_watch.empty();
+        return active_watch.is_active();
     }
 
     // Note: It's very easy to modify these watchers...
@@ -36,11 +37,14 @@ struct CurrentFileProvider
     // ONLY call if there is an active watch.
     dmon::Watch& get_active_watch()
     {
+        /*
         if (not has_active_watch())
         {
             logger->fatal_error("Active watch does not exist.");
         }
         return watches.at(active_watch);
+        */
+        return active_watch;
     }
 
 private:
@@ -49,9 +53,14 @@ private:
     std::vector<std::string> instances;
     DetectionMode mode = DetectionMode::Automatic;
 
-    std::unordered_map<std::string, dmon::Watch> watches;
-    std::string active_watch;
+    dmon::Watch active_watch;
+
+    // e.g. instances/XYZ
     std::string active_instance;
+    // e.g. XYZ/saves/world1/advancements
+    std::string active_advancement_dir;
+    // e.g. XYZ/saves/world1/advancements/uuid.json
+    std::string active_advancements;
 
     // Should these defaults all be in like, DEFAULTS.hpp
     // so they can be properly documented/referred to?

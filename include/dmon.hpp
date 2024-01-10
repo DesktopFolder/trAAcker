@@ -67,10 +67,10 @@ struct Watch
 
     Watch() = default;
 
-    void debug();
+    void debug() const;
 
-    bool is_active() { return id_.has_value(); }
-    bool has_changes()
+    bool is_active() const { return id_.has_value(); }
+    bool has_changes() const
     {
         if (data_) return data_->has_modifications.load();
         log::error("No valid data_ pointer found during has_changes.");

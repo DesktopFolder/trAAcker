@@ -20,7 +20,7 @@
         }
     },
     "rate": 3,
-    "instances": ["testing/"],
+    "instances": [],
     "log": "aatool.log",
     "vsync": true,
     "verbose": true,

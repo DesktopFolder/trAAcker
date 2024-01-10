@@ -61,7 +61,7 @@ dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
     id_   = dmon_watch(dir_.c_str(), watch_callback, 0, data_.get()).id;
 }
 
-void dmon::Watch::debug()
+void dmon::Watch::debug() const
 {
     const auto& logger = get_logger("dmon::Watch");
     logger.debug("Debugging Watch for directory: ", dir_);
