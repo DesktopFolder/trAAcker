@@ -11,6 +11,10 @@
 
 #include "logging.hpp"
 
+// this implementation still has multiple bugs.
+// another mutex lock error (invalid argument), another
+// problem with not watching directories that we really should be.
+
 namespace dmon
 {
 using watch_id = uint32_t;
@@ -60,10 +64,7 @@ struct Watch
 
     Watch& operator=(Watch&& other)
     {
-        // WHY DOES THIS WORK THIS WAY.
-        // LIKE WHY DOES THIS FUNCTION IN THIS MANNER.
-        // I DO NOT UNDERSTAND.
-        // Lol.
+        deactivate();
         id_   = std::exchange(other.id_, {});
         dir_  = std::move(other.dir_);
         data_ = std::move(other.data_);
@@ -88,7 +89,7 @@ struct Watch
     {
         if (!data_)
         {
-            log::error("No valid data_ pointer found during has_changes.");
+            log::error("No valid data_ pointer found during get_change.");
             return std::nullopt;
         }
         if (data_->has_modifications.load())

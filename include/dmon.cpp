@@ -44,26 +44,12 @@ void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* root
         // fix our custom callback system later to use more info, but...
         return;
     }
-    log::debug("callback from ID: ", watch_id.id);
 
-    // LMAO. This does not work. As what if the watch data has been removed/deleted?
-    // Of course, that is nonfunctional. So we have a race condition around here-ish,
-    // which needs to be fixed. Can't believe I already ran into this within like 5
-    // minutes of testing this out. I don't understand how that is even POSSIBLE.
-    // Probably something obvious I'm missing, of course.
-    // Okay, the obvious fix to this is pretty obvious. We should only have one watch
-    // object, and never actually 'delete' the object, simply change what directory
-    // we watch. If we get spurious callbacks for old directories, simply ignore them.
     reinterpret_cast<dmon::impl::WatchData*>(user)->check_change(filepath);
 }
 
 dmon::Watch::~Watch()
 { 
-    log::debug("Destroying watch.");
-    if (id_.has_value())
-    {
-        log::debug("with id ID: ", *id_);
-    }
     deactivate();
 }
 
@@ -76,10 +62,8 @@ dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
     }
     data_ = std::make_unique<impl::WatchData>(filename);
     id_   = dmon_watch(dir_.c_str(), watch_callback, 0, data_.get()).id;
-    if (id_.has_value())
-    {
-        log::debug("activating ID: ", *id_);
-    }
+    get_logger("dmon::Watch")
+        .debug("Created dmon watch of directory: ", dir_, " with ID: ", *id_);
 }
 
 // way safer way to use this shit... lol.
@@ -115,14 +99,18 @@ void dmon::Watch::debug() const
     {
         logger.debug("Data has a modification? ", data_->has_modifications.load() ? "Yes" : "No");
     }
+    if (id_)
+    {
+        logger.debug("Watch ID: ", *id_);
+    }
 }
 
 void dmon::Watch::deactivate()
 {
     if (id_.has_value())
     {
-        log::debug("deactivating ID: ", *id_);
         dmon_unwatch(dmon_watch_id{*id_});
+        id_.reset();
     }
 }
 
