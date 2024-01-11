@@ -31,11 +31,11 @@ struct WatchData
     void check_change(std::string_view file_path)
     {
         // This is ran in a second thread. Maybe dangerous.
-        const auto& logger = get_logger("dmon");
-        logger.debug("Watching '", file_watched, "', found ", file_path);
+        // const auto& logger = get_logger("dmon");
+        // logger.debug("Watching '", file_watched, "', found ", file_path);
         if ((file_watched.empty() || file_path == file_watched) && not file_path.ends_with("~"))
         {
-            logger.debug("Storing the fact that we found changes.");
+            // logger.debug("Storing the fact that we found changes.");
             std::lock_guard l(change_guard);
             change = file_path;
             has_modifications.store(true);
@@ -48,6 +48,8 @@ struct Watch
 {
     friend class Manager;
 
+    void set_to(std::string dirname);
+
     // Movement and deletion constructors.
     // Handles empty ids (not constructed, etc)
     Watch(Watch&& other)
@@ -58,6 +60,10 @@ struct Watch
 
     Watch& operator=(Watch&& other)
     {
+        // WHY DOES THIS WORK THIS WAY.
+        // LIKE WHY DOES THIS FUNCTION IN THIS MANNER.
+        // I DO NOT UNDERSTAND.
+        // Lol.
         id_   = std::exchange(other.id_, {});
         dir_  = std::move(other.dir_);
         data_ = std::move(other.data_);

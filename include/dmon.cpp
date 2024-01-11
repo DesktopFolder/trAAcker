@@ -44,16 +44,28 @@ void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* root
         // fix our custom callback system later to use more info, but...
         return;
     }
+    log::debug("callback from ID: ", watch_id.id);
 
     // LMAO. This does not work. As what if the watch data has been removed/deleted?
     // Of course, that is nonfunctional. So we have a race condition around here-ish,
     // which needs to be fixed. Can't believe I already ran into this within like 5
     // minutes of testing this out. I don't understand how that is even POSSIBLE.
     // Probably something obvious I'm missing, of course.
+    // Okay, the obvious fix to this is pretty obvious. We should only have one watch
+    // object, and never actually 'delete' the object, simply change what directory
+    // we watch. If we get spurious callbacks for old directories, simply ignore them.
     reinterpret_cast<dmon::impl::WatchData*>(user)->check_change(filepath);
 }
 
-dmon::Watch::~Watch() { deactivate(); }
+dmon::Watch::~Watch()
+{ 
+    log::debug("Destroying watch.");
+    if (id_.has_value())
+    {
+        log::debug("with id ID: ", *id_);
+    }
+    deactivate();
+}
 
 dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
 {
@@ -64,6 +76,33 @@ dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
     }
     data_ = std::make_unique<impl::WatchData>(filename);
     id_   = dmon_watch(dir_.c_str(), watch_callback, 0, data_.get()).id;
+    if (id_.has_value())
+    {
+        log::debug("activating ID: ", *id_);
+    }
+}
+
+// way safer way to use this shit... lol.
+void dmon::Watch::set_to(std::string dirname)
+{
+    if (!data_)
+    {
+        // A little bit cursed, but if it works...
+        if (not dirname.ends_with("/"))
+        {
+            dirname += "/";
+        }
+        dir_ = dirname;
+        // TODO - do we ever want to watch a specific file? ehhh
+        // maybe should do that outside of here or in a separate version
+        data_ = std::make_unique<impl::WatchData>("");
+        id_   = dmon_watch(dir_.c_str(), watch_callback, 0, data_.get()).id;
+        return;
+    }
+    else
+    {
+        std::lock_guard l(data_->change_guard);
+    }
 }
 
 void dmon::Watch::debug() const
@@ -80,7 +119,11 @@ void dmon::Watch::debug() const
 
 void dmon::Watch::deactivate()
 {
-    if (id_.has_value()) dmon_unwatch(dmon_watch_id{*id_});
+    if (id_.has_value())
+    {
+        log::debug("deactivating ID: ", *id_);
+        dmon_unwatch(dmon_watch_id{*id_});
+    }
 }
 
 dmon::Manager::Manager() { dmon_init(); }
