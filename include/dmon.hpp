@@ -14,6 +14,33 @@
 // this implementation still has multiple bugs.
 // another mutex lock error (invalid argument), another
 // problem with not watching directories that we really should be.
+// okay so it turns out the mutex issue was that I forgot to readd my fix.
+// and the other issues appear to be caused by the dmon library itself.
+// basically, we cannot unwatch while watching. you get what I'm saying?
+// if we do the following:
+//
+// dmon_watch(y) -> ID 1
+// dmon_watch(x) -> ID 2
+// dmon_unwatch(y) -> next watch created is now ID 2
+//
+// dmon_watch(z) -> our other watch is broken now
+//
+// TBH I have literally no idea how this is affecting the bugs I'm seeing
+// but the issue is that to figure it out I would need such deep implicit
+// knowledge of how this byzantine nigh-undocumented C library works and
+// although I do appreciate the work of open source developers who produce
+// this kind of thing, I really don't want to bother?
+// So I think it's over for this file. It was a fun and cool and interesting
+// experiment but frankly file watching is pointless. We check the instance
+// first when we poll, then we check the saves directory when we poll. At
+// that point, the added time of checking the advancements directory is...
+// it's so minute it barely even registers on the scale.
+// And it would simplify the code so much that I just don't see any reason
+// to go for it and bite the performance bullet which is, as I said, SO
+// minute because we're really just "listing 1 file in a directory". That's
+// seriously all we're doing. It's probably going to be more performant,
+// it'll just slightly (IN THE SMALLEST POSSIBLE AMOUNT) increase our reset
+// overhead time. Which is like -- kind of irrelevant anyways.
 
 namespace dmon
 {
@@ -64,8 +91,10 @@ struct Watch
 
     Watch& operator=(Watch&& other)
     {
+        if (id_) log::debug("removing id: ", *id_);
         deactivate();
         id_   = std::exchange(other.id_, {});
+        if (id_) log::debug("got new id! ", *id_);
         dir_  = std::move(other.dir_);
         data_ = std::move(other.data_);
         return *this;

@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <vector>
 #include <string>
+#include <filesystem>
 
 struct Logger;
 
@@ -61,6 +62,7 @@ private:
     std::string active_advancement_dir;
     // e.g. XYZ/saves/world1/advancements/uuid.json
     std::string active_advancements;
+    std::filesystem::file_time_type last_modified;
 
     // Should these defaults all be in like, DEFAULTS.hpp
     // so they can be properly documented/referred to?

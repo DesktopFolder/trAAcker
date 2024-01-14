@@ -48,7 +48,11 @@ std::optional<std::string> most_recent_advancement_dir(std::string_view instance
     return std::nullopt;
 }
 
+#ifdef USE_DMON
 std::optional<std::string> most_recent_advancements(std::string_view advancements_path)
+#else
+std::optional<std::pair<std::string, std::filesystem::file_time_type>> most_recent_advancements(std::string_view advancements_path)
+#endif
 {
     namespace fs = std::filesystem;
 
@@ -71,7 +75,11 @@ std::optional<std::string> most_recent_advancements(std::string_view advancement
         }
     }
 
+#ifdef USE_DMON
     return top_path;
+#else
+    return {top_path, top_time};
+#endif
 }
 
 aa::CurrentFileProvider::CurrentFileProvider()
@@ -239,6 +247,8 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
     // Now if we have a new advancements dir, we set a watch on it.
     // Otherwise, we check our current watch to see if it has changed.
     std::string current_advancements_file;
+
+#ifdef USE_DMON
     if (current_advancement_dir != active_advancement_dir || not has_active_watch())
     {
         // New advancements directory. Get the most recently changed file,
@@ -305,6 +315,74 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
             return std::nullopt;
         }
     }
+#endif
+
+    // Goal is to get the most recently changed file.
+    if (current_advancement_dir != active_advancement_dir)
+    {
+        // New advancements directory. Get the most recently changed file.
+        if (auto cur = most_recent_advancements(current_advancement_dir); cur.has_value())
+        {
+            // Okay, we have a file. This is the file we're watching now, so:
+            active_advancements    = std::move(cur->first);
+            active_advancement_dir = std::move(current_advancement_dir);
+            last_modified = cur->second;
+
+            // This might do nothing.
+            active_instance = std::move(current_instance);
+
+            logger->debug("Found a new advancements directory: ", active_advancement_dir);
+            return active_advancements;
+        }
+        // We either don't have an active watch, or our advancement directory changed.
+        else if (active_advancements.empty())
+        {
+            // We don't have an active watch. And we also could not get the current
+            // advancements directory...
+            // Basically, current_advancement_dir doesn't contain anything useful.
+            // And we don't have anything active. So there is nothing to do.
+            logger->debug("No watch + no current advancements directory, could not reset.");
+            return std::nullopt;
+        }
+        else
+        {
+            // We have an active watch, but our current directory isn't the same as our
+            // active one. But, our active one doesn't have a JSON file.
+            // So, use our current watch to check for updates.
+            if (auto changed = active_watch.get_change(); changed.has_value())
+            {
+                // the (saves) directory being watched has updates :)
+                logger->debug("Active watcher with changes: ", active_watch.dir_,
+                              " of: ", changed.value());
+                // We DON'T want to update any of our active data. Because that's still
+                // what we have active! So just return the file that was updated.
+                return std::move(*changed);
+            }
+            else
+            {
+                // No updates from our watch. Therefore, nothing to worry about.
+                return std::nullopt;
+            }
+        }
+    }
+    else
+    {
+        // We haven't moved around, AND our watch exists.
+        // Check if we have an update from our watch.
+        if (auto changed = active_watch.get_change(); changed.has_value())
+        {
+            // the (saves) directory being watched has updates :)
+            logger->debug("watcher with changes: ", active_watch.dir_, " of: ", changed.value());
+            active_advancements = std::move(*changed);
+            return active_advancements;
+        }
+        else
+        {
+            // Nope, no changes!
+            return std::nullopt;
+        }
+    }
+
 }
 
 void aa::CurrentFileProvider::debug() { get_active_watch().debug(); }

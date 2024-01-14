@@ -45,6 +45,8 @@ void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* root
         return;
     }
 
+    log::debug("DMON watch_callback got callback in: ", rootdir, ", with ", filepath);
+
     reinterpret_cast<dmon::impl::WatchData*>(user)->check_change(filepath);
 }
 
@@ -110,6 +112,7 @@ void dmon::Watch::deactivate()
     if (id_.has_value())
     {
         dmon_unwatch(dmon_watch_id{*id_});
+        log::debug("no more id: ", *id_);
         id_.reset();
     }
 }
