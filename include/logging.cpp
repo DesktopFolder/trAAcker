@@ -1,5 +1,6 @@
 #include "logging.hpp"
 
+namespace aa {
 bool Logger::stdout_default = false;
 LogLevel Logger::level      = LogLevel::Debug;
 
@@ -32,8 +33,8 @@ std::ofstream* get_file(std::string_view name)
 
     if (not files.contains(name))
     {
-        auto [p, _] = files.emplace(
-            name, std::make_unique<std::ofstream>(name, std::ios::trunc | std::ios::out));
+        auto [p, _] = files.emplace(name, std::make_unique<std::ofstream>(
+                                              std::string{name}, std::ios::trunc | std::ios::out));
         if (not p->second->good())
         {
             log::error("Failed to open log file: ", name);
@@ -95,4 +96,5 @@ LogLevel Logger::set_level(std::string_view level)
     }
 
     return Logger::level;
+}
 }

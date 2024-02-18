@@ -6,7 +6,8 @@
         "criteria-padding": 1,
         "advancement-padding": 16,
         "advancement-font-size": 12,
-        "frame": "none"
+        "frame": "none",
+        "rate": 3
     },
     "window": {
         "close-on": "any",
@@ -19,7 +20,6 @@
             "title": "trAAcker OBS Overlay :)"
         }
     },
-    "rate": 3,
     "instances": [],
     "log": "aatool.log",
     "vsync": true,

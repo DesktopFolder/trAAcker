@@ -7,6 +7,8 @@
 #include <nlohmann/json.hpp>
 using json = nlohmann::json;
 
+namespace aa
+{
 namespace manifest
 {
 // This namespace exists to group parsers that only act on
@@ -73,7 +75,7 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
 
     logger.debug("Loading core advancement manifest from file: ", filename);
 
-    std::ifstream f(filename);
+    std::ifstream f(filename.data() /* msvc */);
     if (!f.good())
     {
         logger.error("Failed to load core advancement manifest from file: ", filename);
@@ -171,7 +173,7 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
             {
                 if (not assets.contains(explicit_icon))
                 {
-                    logger.fatal_error("Could not locate icon: ", explicit_icon, " (for",
+                    logger.fatal_error("Could not locate icon: ", explicit_icon, " (for ",
                                        adv.full_id(), ")");
                 }
 
@@ -210,7 +212,7 @@ AdvancementStatus AdvancementStatus::from_file(std::string_view filename,
 
     logger.debug("Loading advancements from file: ", filename);
 
-    std::ifstream f(filename);
+    std::ifstream f(filename.data() /* msvc */);
     if (!f.good())
     {
         logger.error("Could not open file: ", filename);
@@ -307,3 +309,4 @@ AdvancementStatus AdvancementStatus::from_default(const AdvancementManifest& man
     ret.incomplete = manifest.advancements;
     return ret;
 }
+} // namespace aa

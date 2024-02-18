@@ -2,6 +2,7 @@
 
 #include "utilities.hpp"
 #include "logging.hpp"
+#include "compat.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
@@ -10,41 +11,48 @@
 
 namespace sf { class Font; }
 
+namespace aa
+{
 inline std::pair<std::string, std::string> basic_string_splitter(std::string_view s)
 {
     // Very simple algorithm.
     // Our goal is to split at the 'most central' point of the string.
     const size_t center = s.size() / 2;
-    size_t left = center;
-    size_t right = center;
+    size_t left         = center;
+    size_t right        = center;
     while (true)
     {
         if (s[left] == ' ')
         {
-            return {std::string{s.substr(0, left)}, std::string{s.substr(left+1)}};
+            return {std::string{s.substr(0, left)}, std::string{s.substr(left + 1)}};
         }
         if (s[right] == ' ')
         {
-            return {std::string{s.substr(0, right)}, std::string{s.substr(right+1)}};
+            return {std::string{s.substr(0, right)}, std::string{s.substr(right + 1)}};
         }
         if (left == 0 && right == s.size() - 1)
         {
             log::error("Cannot split the string: ", s);
             throw std::runtime_error("Failed to split a string.");
         }
-        if (left != 0) { left -= 1; }
-        if (right != s.size() - 1) { right += 1; }
+        if (left != 0)
+        {
+            left -= 1;
+        }
+        if (right != s.size() - 1)
+        {
+            right += 1;
+        }
     }
 }
 
-namespace aa
-{
 struct ResourceManager
 {
     static ResourceManager& instance();
     static std::unordered_map<std::string, std::string> getAllAssets();
     static std::string assetName(std::string filePath)
     {
+        aa::normalize_path(filePath);
         if (filePath.size() < 3) return filePath;
         // remove .png
         if (filePath.ends_with(".png") || filePath.ends_with(".gif"))

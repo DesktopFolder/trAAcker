@@ -16,7 +16,9 @@
 #include "src/Advancements.hpp"
 #include "src/TurnTable.hpp"
 
-int main()
+using namespace aa;
+
+void run()
 {
     // Leave this at the start of main to ensure correct shutdown order.
     // Um... sort of dumb, but I believe in 'dumb but works until I fix it'
@@ -139,6 +141,19 @@ int main()
     if (mainwindow.isOpen())
     {
         mainwindow.close();
+    }
+}
+
+int main()
+{
+    try
+    {
+        run();
+    }
+    catch (const std::exception& e)
+    {
+        std::cout << e.what() << std::endl;
+        throw;
     }
     return 0;
 }

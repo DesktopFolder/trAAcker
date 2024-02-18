@@ -6,9 +6,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON) # We need this lol.
 option(SANITIZE "Whether or not to sanitize builds" "NO_SANITIZE")
 
 project(
-    AAToolCPP
+    trAAcker
     VERSION 0.1
-    DESCRIPTION "AA Tool, C++, Bad"
+    DESCRIPTION "trAAcker - A cross-platform Minecraft advancements tracker."
     LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD
@@ -18,6 +18,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(DOWNLOAD_EXTRACT_TIMESTAMP ON)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+
+# list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include(FetchContent)
 
@@ -52,7 +54,7 @@ FetchContent_MakeAvailable(SFML)
 # Also note: https://github.com/nlohmann/json/pull/4080
 FetchContent_Declare(json
     GIT_REPOSITORY https://github.com/nlohmann/json
-    GIT_TAG v3.11.2
+    GIT_TAG v3.11.3
     #SYSTEM)
     )
 FetchContent_MakeAvailable(json)
@@ -90,12 +92,18 @@ if (APPLE)
     list(APPEND CROSS_PLATFORM_DEPENDENCIES "include/osx/Focus2Wrapper.mm")
 endif()
 
+if(WIN32)
+# find_package(WDK REQUIRED)
+endif()
+
 add_executable(
-    AAToolCPP
+    trAAcker
     # Library things
     include/dmon.cpp include/dmon.hpp
     include/logging.cpp include/logging.hpp
     # Cursed things
+    include/app_finder.cpp include/app_finder.hpp
+    include/compat.cpp include/compat.hpp
     ${CROSS_PLATFORM_DEPENDENCIES}
     # Source things? Hmmm
     src/Advancements.cpp src/Advancements.hpp
@@ -111,23 +119,28 @@ if(${SANITIZE} STREQUAL "address")
     add_link_options(-fsanitize=address)
 endif()
 
-target_include_directories(AAToolCPP PRIVATE "include/")
-#target_link_libraries(AAToolCPP PRIVATE
+target_include_directories(trAAcker PRIVATE "include/")
+#target_link_libraries(trAAcker PRIVATE
 #    # RmlUi::RmlUi
 #    )
 
 if(APPLE)
     # Required for dmon
-    target_link_libraries(AAToolCPP PRIVATE
+    target_link_libraries(trAAcker PRIVATE
         "-framework CoreFoundation"
         "-framework CoreServices"
         "-framework AppKit"
     )
 endif()
-target_link_libraries(AAToolCPP PRIVATE "-lpthread")
-target_link_libraries(AAToolCPP PUBLIC sfml-graphics sfml-window sfml-system)
-target_link_libraries(AAToolCPP PRIVATE fmt::fmt)
-target_link_libraries(AAToolCPP PRIVATE nlohmann_json::nlohmann_json)
+if(WIN32)
+target_link_libraries(trAAcker PRIVATE ntdll)
+else()
+target_link_libraries(trAAcker PRIVATE "-lpthread")
+endif()
+
+target_link_libraries(trAAcker PUBLIC sfml-graphics sfml-window sfml-system)
+target_link_libraries(trAAcker PRIVATE fmt::fmt)
+target_link_libraries(trAAcker PRIVATE nlohmann_json::nlohmann_json)
 
 if (EXISTS ${PROJECT_BINARY_DIR}/compile_commands.json)
     file(COPY ${PROJECT_BINARY_DIR}/compile_commands.json DESTINATION ${PROJECT_SOURCE_DIR})

@@ -13,6 +13,8 @@
 #include <optional>
 #include <sstream>
 
+namespace aa
+{
 // just for now, for safety reasons... lol
 namespace detail
 {
@@ -206,3 +208,4 @@ void error(Ts&&... ts)
     get_logger("root").error(std::forward<Ts>(ts)...);
 }
 } // namespace log
+} // namespace aa

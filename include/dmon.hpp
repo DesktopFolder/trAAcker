@@ -42,6 +42,8 @@
 // it'll just slightly (IN THE SMALLEST POSSIBLE AMOUNT) increase our reset
 // overhead time. Which is like -- kind of irrelevant anyways.
 
+namespace aa
+{
 namespace dmon
 {
 using watch_id = uint32_t;
@@ -83,17 +85,17 @@ struct Watch
 
     // Movement and deletion constructors.
     // Handles empty ids (not constructed, etc)
-    Watch(Watch&& other)
+    Watch(Watch&& other) noexcept
         : id_(std::exchange(other.id_, {})), dir_(std::move(other.dir_)),
           data_{std::move(other.data_)}
     {
     }
 
-    Watch& operator=(Watch&& other)
+    Watch& operator=(Watch&& other) noexcept
     {
         if (id_) log::debug("removing id: ", *id_);
         deactivate();
-        id_   = std::exchange(other.id_, {});
+        id_ = std::exchange(other.id_, {});
         if (id_) log::debug("got new id! ", *id_);
         dir_  = std::move(other.dir_);
         data_ = std::move(other.data_);
@@ -165,3 +167,4 @@ private:
     ~Manager();
 };
 } // namespace dmon
+} // namespace aa

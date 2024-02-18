@@ -4,13 +4,15 @@
 
 #include "ConfigProvider.hpp"
 
-aa::WindowManager& aa::WindowManager::instance()
+namespace aa
 {
-    static aa::WindowManager mgr{};
+WindowManager& WindowManager::instance()
+{
+    static WindowManager mgr{};
     return mgr;
 }
 
-aa::WindowManager::WindowManager()
+WindowManager::WindowManager()
     : main_(sf::VideoMode(1280, 720), "trAAcker"),
       overlay_(sf::VideoMode(800, 200), "trAAcker OBS Overlay"),
       logger(get_logger("WindowManager")), clearColours_{}
@@ -50,3 +52,4 @@ aa::WindowManager::WindowManager()
         }
     }
 }
+} // namespace aa

@@ -5,9 +5,12 @@
 
 #include <fstream>
 #include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
 
-aa::OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config)
+namespace aa
+{
+OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config)
 {
     // Configure the overlay.
     using aa::conf::apply;
@@ -48,7 +51,7 @@ aa::OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann
     reset_from_status(status);
 }
 
-void aa::OverlayManager::remap_textures(AdvancementManifest& manifest)
+void OverlayManager::remap_textures(AdvancementManifest& manifest)
 {
     auto& rm = aa::ResourceManager::instance();
     // This works for now :)
@@ -70,7 +73,7 @@ void aa::OverlayManager::remap_textures(AdvancementManifest& manifest)
     }
 }
 
-void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)
+void OverlayManager::reset_from_status(const AdvancementStatus& status)
 {
     if (!status.meta.valid)
     {
@@ -92,7 +95,7 @@ void aa::OverlayManager::reset_from_status(const AdvancementStatus& status)
     }
 }
 
-void aa::OverlayManager::reset_from_file(std::string_view filename,
+void OverlayManager::reset_from_file(std::string_view filename,
                                          const AdvancementManifest& manifest)
 {
     // Okay, now to test out the new advancements setup.
@@ -105,7 +108,7 @@ void aa::OverlayManager::reset_from_file(std::string_view filename,
     reset_from_status(status);
 }
 
-void aa::OverlayManager::reset(const AdvancementManifest& manifest)
+void OverlayManager::reset(const AdvancementManifest& manifest)
 {
     // Okay, now to test out the new advancements setup.
     auto status = AdvancementStatus::from_default(manifest);
@@ -115,10 +118,11 @@ void aa::OverlayManager::reset(const AdvancementManifest& manifest)
     reset_from_status(status);
 }
 
-void aa::OverlayManager::debug()
+void OverlayManager::debug()
 {
     auto& logger = get_logger("OverlayManager::debug");
 
     logger.debug("Major requirements buffer size: ", reqs.rb_.buf().size());
     logger.debug("Pre-requirements buffer size: ", prereqs.rb_.buf().size());
 }
+} // namespace aa
