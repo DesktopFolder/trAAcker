@@ -5,5 +5,5 @@
 struct ApplicationInfo {
     std::string name;
     std::string exec;
-    int pid = 0; 
+    int pid = 0;
 };

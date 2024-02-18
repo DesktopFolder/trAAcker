@@ -3,12 +3,18 @@
 #include "logging.hpp"
 
 // todo - just ignore everything ever here.
+#ifndef _WIN32
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wc++11-narrowing"
+#endif
 #define DMON_IMPL
 #include "dmon.h"
+#ifndef _WIN32
 #pragma clang diagnostic pop
+#endif
 
+namespace aa
+{
 // Utility functions - mostly enum conversion etc
 std::string action_to_string(dmon_action action)
 {
@@ -50,10 +56,7 @@ void watch_callback(dmon_watch_id watch_id, dmon_action action, const char* root
     reinterpret_cast<dmon::impl::WatchData*>(user)->check_change(filepath);
 }
 
-dmon::Watch::~Watch()
-{ 
-    deactivate();
-}
+dmon::Watch::~Watch() { deactivate(); }
 
 dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
 {
@@ -64,8 +67,7 @@ dmon::Watch::Watch(std::string dirname, std::string filename) : dir_(dirname)
     }
     data_ = std::make_unique<impl::WatchData>(filename);
     id_   = dmon_watch(dir_.c_str(), watch_callback, 0, data_.get()).id;
-    get_logger("dmon::Watch")
-        .debug("Created dmon watch of directory: ", dir_, " with ID: ", *id_);
+    get_logger("dmon::Watch").debug("Created dmon watch of directory: ", dir_, " with ID: ", *id_);
 }
 
 // way safer way to use this shit... lol.
@@ -119,3 +121,4 @@ void dmon::Watch::deactivate()
 
 dmon::Manager::Manager() { dmon_init(); }
 dmon::Manager::~Manager() { dmon_deinit(); }
+} // namespace aa

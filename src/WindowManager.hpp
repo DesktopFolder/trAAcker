@@ -125,8 +125,10 @@ public:
                 return not main_.isOpen();
             case CloseMode::Any:
                 return not main_.isOpen() or not overlay_.isOpen();
+            default: std::terminate();
         }
     }
+
     auto& getMain() { return main_; }
     auto& getOverlay() { return overlay_; }
     sf::RenderWindow& getWindow(WindowID id)

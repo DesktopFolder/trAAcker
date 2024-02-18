@@ -7,6 +7,8 @@
 
 #include <filesystem>
 
+namespace aa
+{
 std::optional<std::string> most_recent_advancement_dir(std::string_view instance_path)
 {
     namespace fs = std::filesystem;
@@ -42,7 +44,7 @@ std::optional<std::string> most_recent_advancement_dir(std::string_view instance
     auto adv_dir = top_path / "advancements";
     if (fs::is_directory(adv_dir))
     {
-        return adv_dir;
+        return adv_dir.string() /* for msvc */;
     }
     log::debug("Not directory: ", adv_dir);
     return std::nullopt;
@@ -51,7 +53,8 @@ std::optional<std::string> most_recent_advancement_dir(std::string_view instance
 #ifdef USE_DMON
 std::optional<std::string> most_recent_advancements(std::string_view advancements_path)
 #else
-std::optional<std::pair<std::string, std::filesystem::file_time_type>> most_recent_advancements(std::string_view advancements_path)
+std::optional<std::pair<std::string, std::filesystem::file_time_type>>
+most_recent_advancements(std::string_view advancements_path)
 #endif
 {
     namespace fs = std::filesystem;
@@ -78,11 +81,12 @@ std::optional<std::pair<std::string, std::filesystem::file_time_type>> most_rece
 #ifdef USE_DMON
     return top_path;
 #else
-    return {top_path, top_time};
+    // for msvc...
+    return std::make_pair(top_path.string(), top_time);
 #endif
 }
 
-aa::CurrentFileProvider::CurrentFileProvider()
+CurrentFileProvider::CurrentFileProvider()
     : logger(/* why a pointer? */ &get_logger("CurrentFileProvider"))
 {
     using aa::conf::get_or;
@@ -123,7 +127,7 @@ aa::CurrentFileProvider::CurrentFileProvider()
     // watcher = dmon::Manager::instance().add_watch(conf["saves"].get<std::string>());
 }
 
-std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
+std::optional<std::string> CurrentFileProvider::poll(uint64_t ticks)
 {
     // Quick return at the top here before we do anything else.
     if (ticks % poll_interval)
@@ -326,7 +330,7 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
             // Okay, we have a file. This is the file we're watching now, so:
             active_advancements    = std::move(cur->first);
             active_advancement_dir = std::move(current_advancement_dir);
-            last_modified = cur->second;
+            last_modified          = cur->second;
 
             // This might do nothing.
             active_instance = std::move(current_instance);
@@ -382,7 +386,7 @@ std::optional<std::string> aa::CurrentFileProvider::poll(uint64_t ticks)
             return std::nullopt;
         }
     }
-
 }
 
-void aa::CurrentFileProvider::debug() { get_active_watch().debug(); }
+void CurrentFileProvider::debug() { get_active_watch().debug(); }
+} // namespace aa

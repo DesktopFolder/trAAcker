@@ -7,10 +7,10 @@
 #include <string>
 #include <filesystem>
 
-struct Logger;
-
 namespace aa
 {
+struct Logger;
+
 enum class DetectionMode {
     Automatic,
     Explicit,

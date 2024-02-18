@@ -6,13 +6,15 @@
 #include <SFML/Graphics.hpp>
 #include <filesystem>
 
-aa::ResourceManager& aa::ResourceManager::instance()
+namespace aa
+{
+aa::ResourceManager& ResourceManager::instance()
 {
     static aa::ResourceManager mgr{};
     return mgr;
 }
 
-sf::Drawable& aa::ResourceManager::basic_marker(float radius, float x, float y)
+sf::Drawable& ResourceManager::basic_marker(float radius, float x, float y)
 {
     static sf::CircleShape shape{};
 
@@ -52,7 +54,7 @@ void asset_helper(auto& dir_entry, auto& assets)
     assets.insert_or_assign(aa::ResourceManager::assetName(s), s);
 }
 
-std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()
+std::unordered_map<std::string, std::string> ResourceManager::getAllAssets()
 {
     namespace fs = std::filesystem;
 
@@ -81,7 +83,8 @@ std::unordered_map<std::string, std::string> aa::ResourceManager::getAllAssets()
     return assets;
 }
 
-const sf::Font& aa::ResourceManager::get_font() {
+const sf::Font& ResourceManager::get_font()
+{
     static const sf::Font font = []()
     {
         sf::Font font;
@@ -92,7 +95,7 @@ const sf::Font& aa::ResourceManager::get_font() {
     return font;
 }
 
-const sf::Texture* aa::ResourceManager::remap_texture(const sf::Texture* base, uint64_t new_size)
+const sf::Texture* ResourceManager::remap_texture(const sf::Texture* base, uint64_t new_size)
 {
     const auto [x, y] = base->getSize();
     if (x == new_size)
@@ -125,9 +128,9 @@ const sf::Texture* aa::ResourceManager::remap_texture(const sf::Texture* base, u
     return &t.getTexture();
 }
 
-aa::ResourceManager::~ResourceManager() {}
+ResourceManager::~ResourceManager() {}
 
-void aa::ResourceManager::loadCriteria(std::string path, std::string name)
+void ResourceManager::loadCriteria(std::string path, std::string name)
 {
     // this is all startup stuff so don't worry about it
     sf::Texture text;
@@ -140,7 +143,7 @@ void aa::ResourceManager::loadCriteria(std::string path, std::string name)
     criteria_map.emplace(name, std::move(t));
 }
 
-void aa::ResourceManager::loadAllCriteria()
+void ResourceManager::loadAllCriteria()
 {
     criteria["animals"] = {};
     current_            = &criteria["animals"];
@@ -340,3 +343,4 @@ void aa::ResourceManager::loadAllCriteria()
     loadCriteria("assets/sprites/global/criteria/mobs/zombified_piglin.png", "zombified_piglin");
     current_ = nullptr;
 }
+} // namespace aa

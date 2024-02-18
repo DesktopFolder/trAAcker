@@ -14,16 +14,20 @@
 
 namespace aa
 {
-struct Advancement {
+struct OverlayAdvancement {
     // let's not care too much atm
-    Advancement(std::string c, std::string n, std::string i) : category(c), name(n), icon(i) {}
+    OverlayAdvancement(std::string c, std::string n, std::string i) : category(c), name(n), icon(i)
+    {
+    }
     std::string category;
     std::string name;
     std::string icon;
 };
 
-struct Criteria {
-    Criteria(std::string c, std::string n, std::string i) : advancement(c), name(n), icon(i) {}
+struct OverlayCriteria {
+    OverlayCriteria(std::string c, std::string n, std::string i) : advancement(c), name(n), icon(i)
+    {
+    }
     std::string advancement;
     std::string name;
     std::string icon;
@@ -35,8 +39,8 @@ struct OverlayManager
     TurnTable reqs;
     sf::Texture testText;
 
-    std::vector<Advancement> advancements;
-    std::vector<Criteria> criteria;
+    std::vector<OverlayAdvancement> advancements;
+    std::vector<OverlayCriteria> criteria;
 
     OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config);
 

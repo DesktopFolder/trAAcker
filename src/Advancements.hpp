@@ -6,6 +6,8 @@
 
 #include "utilities.hpp"
 
+namespace aa
+{
 struct Advancement
 {
     /* Advancement - The canonical type.
@@ -22,9 +24,7 @@ struct Advancement
     std::string pretty_name;
     std::string short_name;
 
-    std::string full_id() const {
-        return category + "/" + name;
-    }
+    std::string full_id() const { return category + "/" + name; }
 
     // Just do this for now. Deal with names later.
     string_map<const sf::Texture*> criteria;
@@ -36,7 +36,7 @@ struct Advancement
         criteria_ordered.push_back(key);
     }
 
-    const sf::Texture* icon;
+    const sf::Texture* icon{};
 };
 
 /* AdvancementManifest
@@ -57,7 +57,7 @@ struct AdvancementManifest
  * - player's advancements.json -> current advancements
  * - implicit: 'which advancements are incomplete'
  */
-struct AdvancementStatus 
+struct AdvancementStatus
 {
     static AdvancementStatus from_file(std::string_view filename, const AdvancementManifest&);
     static AdvancementStatus from_default(const AdvancementManifest&);
@@ -68,8 +68,10 @@ struct AdvancementStatus
 
     // Metainformation that we gather as we parse. All custom, because we don't want
     // to store and search through absolutely everything.
-    struct {
+    struct
+    {
         bool has_egap = false;
-        bool valid = true;
+        bool valid    = true;
     } meta{};
 };
+} // namespace aa
