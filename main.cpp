@@ -10,6 +10,7 @@
 #include "src/ConfigProvider.hpp"
 #include "src/FileProvider.hpp"
 #include "src/Overlay.hpp"
+#include "src/Map.hpp"
 #include "src/ResourceManager.hpp"
 #include "src/WindowManager.hpp"
 
@@ -56,6 +57,7 @@ void run()
     window.setVerticalSyncEnabled(vsync);
 
     aa::OverlayManager ov(manifest, conf["overlay"]);
+    aa::MapManager mapper(conf["map"]);
 
     aa::CurrentFileProvider fp;
     auto& rm = aa::ResourceManager::instance();
@@ -130,6 +132,7 @@ void run()
         }
         */
         ov.render(window);
+        mapper.render(window, ticks);
 
         // Render loop end.
         wm.displayAll();

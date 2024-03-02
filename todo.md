@@ -30,3 +30,4 @@ Primary todolist:
 - Checklist based tiered/configurable helper/tutorial system
 - ALERT: Biome X missing [you have entered: BIOME y]
 - ALERT: Food X missing
+- https://github.com/kwhat/libuiohook

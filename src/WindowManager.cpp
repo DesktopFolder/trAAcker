@@ -15,6 +15,9 @@ WindowManager& WindowManager::instance()
 WindowManager::WindowManager()
     : main_(sf::VideoMode(1280, 720), "trAAcker"),
       overlay_(sf::VideoMode(800, 200), "trAAcker OBS Overlay"),
+      map_(sf::VideoMode(400, 400), "trAAcker Map"),
+      reminders_(sf::VideoMode(400, 400), "trAAcker Reminders"),
+      debug_(sf::VideoMode(400, 400), "trAAcker Debug"),
       logger(get_logger("WindowManager")), clearColours_{}
 {
     for (auto& col : clearColours_)
