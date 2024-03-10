@@ -50,6 +50,14 @@ std::optional<std::string> most_recent_advancement_dir(std::string_view instance
     return std::nullopt;
 }
 
+auto get_modified_time(std::string_view path)
+{
+    namespace fs = std::filesystem;
+
+    return fs::last_write_time(path);
+}
+
+
 #ifdef USE_DMON
 std::optional<std::string> most_recent_advancements(std::string_view advancements_path)
 #else
@@ -338,54 +346,37 @@ std::optional<std::string> CurrentFileProvider::poll(uint64_t ticks)
             logger->debug("Found a new advancements directory: ", active_advancement_dir);
             return active_advancements;
         }
-        // We either don't have an active watch, or our advancement directory changed.
         else if (active_advancements.empty())
         {
-            // We don't have an active watch. And we also could not get the current
-            // advancements directory...
             // Basically, current_advancement_dir doesn't contain anything useful.
             // And we don't have anything active. So there is nothing to do.
             logger->debug("No watch + no current advancements directory, could not reset.");
             return std::nullopt;
         }
-        else
-        {
-            // We have an active watch, but our current directory isn't the same as our
-            // active one. But, our active one doesn't have a JSON file.
-            // So, use our current watch to check for updates.
-            if (auto changed = active_watch.get_change(); changed.has_value())
-            {
-                // the (saves) directory being watched has updates :)
-                logger->debug("Active watcher with changes: ", active_watch.dir_,
-                              " of: ", changed.value());
-                // We DON'T want to update any of our active data. Because that's still
-                // what we have active! So just return the file that was updated.
-                return std::move(*changed);
-            }
-            else
-            {
-                // No updates from our watch. Therefore, nothing to worry about.
-                return std::nullopt;
-            }
-        }
     }
-    else
+    if (auto cur = most_recent_advancements(current_advancement_dir); cur.has_value())
     {
-        // We haven't moved around, AND our watch exists.
-        // Check if we have an update from our watch.
-        if (auto changed = active_watch.get_change(); changed.has_value())
+        bool has_update = false;
+        if (cur->first != active_advancements)
         {
-            // the (saves) directory being watched has updates :)
-            logger->debug("watcher with changes: ", active_watch.dir_, " of: ", changed.value());
-            active_advancements = std::move(*changed);
+            // Different JSON file... idk why but sure. Do it.
+            has_update = true;
+        }
+        if (last_modified != cur->second)
+        {
+            has_update = true;
+        }
+        if (has_update)
+        {
+            active_advancements    = std::move(cur->first);
+            last_modified          = cur->second;
+            logger->debug("Found an update here: ", active_advancement_dir);
             return active_advancements;
         }
-        else
-        {
-            // Nope, no changes!
-            return std::nullopt;
-        }
+        return std::nullopt;
     }
+    logger->debug("No advancements yet. :/");
+    return std::nullopt;
 }
 
 void CurrentFileProvider::debug() { get_active_watch().debug(); }
