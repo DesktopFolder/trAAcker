@@ -25,6 +25,9 @@ enum class WindowID
 {
     Main,
     Overlay,
+    Map,
+    Reminders,
+    Debug,
 };
 
 enum class CloseMode
@@ -33,8 +36,8 @@ enum class CloseMode
     Main,
 };
 
-static constexpr uint8_t WINDOW_NUMER = 2;
-static constexpr std::array<WindowID, WINDOW_NUMER> WINDOWS{WindowID::Main, WindowID::Overlay};
+static constexpr uint8_t NUMBER_OF_WINDOWS = 5;
+static constexpr std::array<WindowID, NUMBER_OF_WINDOWS> WINDOWS{WindowID::Main, WindowID::Overlay};
 
 inline std::string wid_to_string(WindowID wid)
 {
@@ -42,8 +45,24 @@ inline std::string wid_to_string(WindowID wid)
     {
     case WindowID::Main: return "main";
     case WindowID::Overlay: return "overlay";
+    case WindowID::Map: return "map";
+    case WindowID::Reminders: return "reminders";
+    case WindowID::Debug: return "debug";
     }
     throw std::runtime_error("Got bad window ID.");
+}
+
+inline std::string wid_to_prefix(WindowID wid)
+{
+    static const std::array<std::string, NUMBER_OF_WINDOWS> lut = []{
+        std::array<std::string, NUMBER_OF_WINDOWS> ret;
+        for (size_t i = 0; i < NUMBER_OF_WINDOWS; i++)
+        {
+            ret[i] = wid_to_string(static_cast<WindowID>(i)) + ": ";
+        }
+        return ret;
+    }();
+    return lut[static_cast<uint8_t>(wid)];
 }
 
 class WindowManager
@@ -52,12 +71,15 @@ class WindowManager
 
     sf::RenderWindow main_;
     sf::RenderWindow overlay_;
+    sf::RenderWindow map_;
+    sf::RenderWindow reminders_;
+    sf::RenderWindow debug_;
     CloseMode close_mode{CloseMode::Main};
 
     Logger& logger;
 
-    std::array<sf::Color, WINDOW_NUMER> clearColours_;
-    std::array<WindowID, WINDOW_NUMER> windows_{WindowID::Main, WindowID::Overlay};
+    std::array<sf::Color, NUMBER_OF_WINDOWS> clearColours_;
+    std::array<WindowID, NUMBER_OF_WINDOWS> windows_{WindowID::Main, WindowID::Overlay, WindowID::Map, WindowID::Reminders, WindowID::Debug};
 
 public:
     static WindowManager& instance(/* TODO - Configuration from file */);
@@ -67,13 +89,13 @@ public:
         auto& window = getWindow(id);
         if (event.type == sf::Event::Closed)
         {
-            logger.info("Got close event for wid: ", static_cast<int32_t>(id));
+            logger.info(wid_to_prefix(id), "got close event");
             window.close();
             return true;
         }
         else if (event.type == sf::Event::Resized)
         {
-            logger.info("Got resize event for wid: ", static_cast<int32_t>(id));
+            logger.info(wid_to_prefix(id), "got resize event");
             window.setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
             return true;
         }
@@ -83,10 +105,11 @@ public:
     std::vector<sf::Event> handleEvents()
     {
         std::vector<sf::Event> key_events;
-        for (auto wid : std::array{WindowID::Main, WindowID::Overlay})
+        for (auto wid : std::array{WindowID::Main, WindowID::Overlay, WindowID::Reminders, WindowID::Map, WindowID::Debug})
         {
             sf::Event event;
             auto& window = getWindow(wid);
+            if (not window.isOpen()) { continue; }
             while (window.pollEvent(event))
             {
                 if (handleEvent(event, wid)) continue;
@@ -105,6 +128,7 @@ public:
     {
         for (auto wid : windows_)
         {
+            if (wid == aa::WindowID::Map) continue;
             auto& window = getWindow(wid);
             window.clear(clearColours_[static_cast<uint32_t>(wid)]);
         }
@@ -116,6 +140,7 @@ public:
         {
             auto& window = getWindow(wid);
             window.display();
+            // log::debug("displaying window: ", wid_to_string(wid));
         }
     }
 
@@ -131,12 +156,18 @@ public:
 
     auto& getMain() { return main_; }
     auto& getOverlay() { return overlay_; }
+    auto& getMap() { return map_; }
+    auto& getReminders() { return reminders_; }
+    auto& getDebug() { return debug_; }
     sf::RenderWindow& getWindow(WindowID id)
     {
         switch (id)
         {
         case WindowID::Main: return getMain();
         case WindowID::Overlay: return getOverlay();
+        case WindowID::Map: return getMap();
+        case WindowID::Reminders: return getReminders();
+        case WindowID::Debug: return getDebug();
         }
         throw std::runtime_error("Got bad window ID.");
     }

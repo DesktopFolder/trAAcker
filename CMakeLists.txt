@@ -107,6 +107,7 @@ add_executable(
     ${CROSS_PLATFORM_DEPENDENCIES}
     # Source things? Hmmm
     src/Advancements.cpp src/Advancements.hpp
+    src/Map.cpp src/Map.hpp
     src/Overlay.cpp src/Overlay.hpp
     src/WindowManager.cpp src/WindowManager.hpp
     src/ResourceManager.cpp src/ResourceManager.hpp
