@@ -128,6 +128,7 @@ public:
     {
         for (auto wid : windows_)
         {
+            if (wid == aa::WindowID::Map) continue;
             auto& window = getWindow(wid);
             window.clear(clearColours_[static_cast<uint32_t>(wid)]);
         }
@@ -139,6 +140,7 @@ public:
         {
             auto& window = getWindow(wid);
             window.display();
+            // log::debug("displaying window: ", wid_to_string(wid));
         }
     }
 

@@ -53,6 +53,7 @@ void run()
 
     // Doesn't do anything, we're just creating bindings.
     auto& window     = aa::WindowManager::instance().getOverlay();
+    auto& mapWindow     = aa::WindowManager::instance().getMap();
     auto& mainwindow = aa::WindowManager::instance().getMain();
     window.setVerticalSyncEnabled(vsync);
 
@@ -132,7 +133,7 @@ void run()
         }
         */
         ov.render(window);
-        mapper.render(window, ticks);
+        mapper.render(mapWindow, ticks);
 
         // Render loop end.
         wm.displayAll();
