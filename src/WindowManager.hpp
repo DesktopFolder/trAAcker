@@ -37,7 +37,6 @@ enum class CloseMode
 };
 
 static constexpr uint8_t NUMBER_OF_WINDOWS = 5;
-static constexpr std::array<WindowID, NUMBER_OF_WINDOWS> WINDOWS{WindowID::Main, WindowID::Overlay};
 
 inline std::string wid_to_string(WindowID wid)
 {
@@ -65,28 +64,39 @@ inline std::string wid_to_prefix(WindowID wid)
     return lut[static_cast<uint8_t>(wid)];
 }
 
+struct Window
+{
+    sf::RenderWindow window;
+    WindowID id;
+
+    sf::Color clearColour{0, 0, 0};
+
+    void clear()
+    {
+        window.clear(clearColour);
+    }
+
+    enum Flags : uint8_t {
+        MainWindow = 0b1, // Is this our main window?
+    } flags;
+};
+
 class WindowManager
 {
     WindowManager(/* TODO - Configuration from file */);
 
-    sf::RenderWindow main_;
-    sf::RenderWindow overlay_;
-    sf::RenderWindow map_;
-    sf::RenderWindow reminders_;
-    sf::RenderWindow debug_;
+    std::array<Window, NUMBER_OF_WINDOWS> windows_;
+
     CloseMode close_mode{CloseMode::Main};
 
     Logger& logger;
-
-    std::array<sf::Color, NUMBER_OF_WINDOWS> clearColours_;
-    std::array<WindowID, NUMBER_OF_WINDOWS> windows_{WindowID::Main, WindowID::Overlay, WindowID::Map, WindowID::Reminders, WindowID::Debug};
 
 public:
     static WindowManager& instance(/* TODO - Configuration from file */);
 
     bool handleEvent(sf::Event& event, WindowID id)
     {
-        auto& window = getWindow(id);
+        auto& window = get(id);
         if (event.type == sf::Event::Closed)
         {
             logger.info(wid_to_prefix(id), "got close event");
@@ -108,7 +118,7 @@ public:
         for (auto wid : std::array{WindowID::Main, WindowID::Overlay, WindowID::Reminders, WindowID::Map, WindowID::Debug})
         {
             sf::Event event;
-            auto& window = getWindow(wid);
+            auto& window = get(wid);
             if (not window.isOpen()) { continue; }
             while (window.pollEvent(event))
             {
@@ -126,20 +136,18 @@ public:
 
     void clearAll()
     {
-        for (auto wid : windows_)
+        for (auto& window : windows_)
         {
-            if (wid == aa::WindowID::Map) continue;
-            auto& window = getWindow(wid);
-            window.clear(clearColours_[static_cast<uint32_t>(wid)]);
+            if (window.id == aa::WindowID::Map) continue;
+            window.clear();
         }
     }
 
     void displayAll()
     {
-        for (auto wid : windows_)
+        for (auto& wid : windows_)
         {
-            auto& window = getWindow(wid);
-            window.display();
+            wid.window.display();
             // log::debug("displaying window: ", wid_to_string(wid));
         }
     }
@@ -147,29 +155,22 @@ public:
     bool is_shutdown() const { 
         switch (close_mode) {
             case CloseMode::Main:
-                return not main_.isOpen();
+                return not get(WindowID::Main).isOpen();
             case CloseMode::Any:
-                return not main_.isOpen() or not overlay_.isOpen();
+                return not get(WindowID::Main).isOpen() or not get(WindowID::Overlay).isOpen();
             default: std::terminate();
         }
     }
 
-    auto& getMain() { return main_; }
-    auto& getOverlay() { return overlay_; }
-    auto& getMap() { return map_; }
-    auto& getReminders() { return reminders_; }
-    auto& getDebug() { return debug_; }
-    sf::RenderWindow& getWindow(WindowID id)
+    inline sf::RenderWindow& get(WindowID id)
     {
-        switch (id)
-        {
-        case WindowID::Main: return getMain();
-        case WindowID::Overlay: return getOverlay();
-        case WindowID::Map: return getMap();
-        case WindowID::Reminders: return getReminders();
-        case WindowID::Debug: return getDebug();
-        }
-        throw std::runtime_error("Got bad window ID.");
+        auto iid = static_cast<uint8_t>(id);
+        return windows_[iid].window;
+    }
+    inline const sf::RenderWindow& get(WindowID id) const
+    {
+        auto iid = static_cast<uint8_t>(id);
+        return windows_[iid].window;
     }
 };
 } // namespace aa

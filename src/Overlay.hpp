@@ -42,7 +42,7 @@ struct OverlayManager
     std::vector<OverlayAdvancement> advancements;
     std::vector<OverlayCriteria> criteria;
 
-    OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config);
+    OverlayManager(AdvancementManifest& manifest);
 
     // assumes manifest is in advancements.json atm
     void reset_from_file(std::string_view filename, const AdvancementManifest& manifest);

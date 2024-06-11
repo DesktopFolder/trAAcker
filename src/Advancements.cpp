@@ -199,7 +199,7 @@ AdvancementManifest::from_file(std::string_view filename /* advancements.json */
         }
     }
 
-    logger.info("Loaded ", ret.advancements.size(), " advancements.");
+    logger.info("Loaded ", ret.advancements.size(), " advancements from: ", filename);
 
     return ret;
 }
