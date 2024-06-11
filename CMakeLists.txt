@@ -106,6 +106,7 @@ add_executable(
     include/compat.cpp include/compat.hpp
     ${CROSS_PLATFORM_DEPENDENCIES}
     # Source things? Hmmm
+    src/Application.cpp src/Application.hpp
     src/Advancements.cpp src/Advancements.hpp
     src/Map.cpp src/Map.hpp
     src/Overlay.cpp src/Overlay.hpp

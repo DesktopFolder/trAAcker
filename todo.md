@@ -1,4 +1,16 @@
-# Current Design Notes (Redesign / Refactor / Foundation Development)
+# New Design Notes
+
+- key providers can be pub/subbed?
+- need to separate out subsystems / subapps
+
+subapps:
+- reminders
+- map
+- statistics tracker
+- overlay
+- advancements lister
+
+# Old Design Notes (Redesign / Refactor / Foundation Development)
 
 Primary todolist:
 - Background for main advancements in overlay

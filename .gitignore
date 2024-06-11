@@ -11,3 +11,6 @@ build*/
 # Windows things :) (Pain)
 .vs/
 .vscode/
+
+# Linux things :) (Joy)
+linux/

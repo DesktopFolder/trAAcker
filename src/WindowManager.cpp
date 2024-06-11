@@ -12,19 +12,27 @@ WindowManager& WindowManager::instance()
     return mgr;
 }
 
-WindowManager::WindowManager()
-    : main_(sf::VideoMode(1280, 720), "trAAcker"),
-      overlay_(sf::VideoMode(800, 200), "trAAcker OBS Overlay"),
-      map_(sf::VideoMode(400, 400), "trAAcker Map"),
-      reminders_(sf::VideoMode(400, 400), "trAAcker Reminders"),
-      debug_(sf::VideoMode(400, 400), "trAAcker Debug"),
-      logger(get_logger("WindowManager")), clearColours_{}
+Window factory(WindowID id)
 {
-    for (auto& col : clearColours_)
+    switch(id)
     {
-        col = sf::Color(0, 0, 0);
+        case WindowID::Main:
+        return {{sf::VideoMode(1280, 720), "trAAcker"}, id};
+        case WindowID::Overlay:
+        return {{sf::VideoMode(800, 200), "trAAcker OBS Overlay"}, id};
+        case WindowID::Map:
+        return {{sf::VideoMode(400, 400), "trAAcker Map"}, id};
+        case WindowID::Reminders:
+        return {{sf::VideoMode(400, 400), "trAAcker Reminders"}, id};
+        case WindowID::Debug:
+        return {{sf::VideoMode(400, 400), "trAAcker Debug"}, id};
     }
+}
 
+WindowManager::WindowManager()
+    : windows_{factory(WindowID::Main), factory(WindowID::Overlay), factory(WindowID::Map), factory(WindowID::Reminders), factory(WindowID::Debug)},
+      logger(get_logger("WindowManager"))
+{
     // Configuration
     auto conf = aa::conf::getNS("window");
     if (conf.empty()) return;
@@ -34,9 +42,9 @@ WindowManager::WindowManager()
         close_mode = CloseMode::Any;
     }
 
-    for (auto wid : WINDOWS)
+    for (auto& window : windows_)
     {
-        auto wstr = wid_to_string(wid);
+        auto wstr = wid_to_string(window.id);
         if (conf.contains(wstr))
         {
             auto& wconf = conf[wstr];
@@ -44,14 +52,14 @@ WindowManager::WindowManager()
             {
                 // Wow, we can set a config value
                 auto cl   = wconf["bg"].template get<std::array<uint8_t, 3>>();
-                auto& col = clearColours_[static_cast<uint32_t>(wid)];
+                auto& col = window.clearColour;
                 col.r     = cl[0];
                 col.g     = cl[1];
                 col.b     = cl[2];
             }
 
             aa::conf::apply(wconf, "title",
-                            [&](std::string title) { getWindow(wid).setTitle(title); });
+                            [&](std::string title) { window.window.setTitle(title); });
         }
     }
 }

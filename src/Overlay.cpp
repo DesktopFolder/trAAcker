@@ -10,11 +10,13 @@ using json = nlohmann::json;
 
 namespace aa
 {
-OverlayManager::OverlayManager(AdvancementManifest& manifest, const nlohmann::json& config)
+OverlayManager::OverlayManager(AdvancementManifest& manifest)
 {
     // Configure the overlay.
     using aa::conf::apply;
     using aa::conf::get_or;
+
+    const auto& config = aa::conf::getNS("overlay");
 
     // Set the tile sizes. This is specifically the size of the inner sprite in the
     // case of the major advancements. For the criteria, it's just... the size.
